@@ -3,11 +3,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Loading from "./page/loading";
 import Login from "./page/login";
+import HomePage from "./customers/components/HomePage"
+import Layout from "./customers/pages/Layout";
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<Loading />} />
     <Route path="/login" element={<Login />} />
+
+    <Route element={<Layout />}>
+      <Route path="/" element={<Loading />} />
+      <Route path="home" element={<HomePage />} />
+    </Route>
   </Routes>
 );
 
