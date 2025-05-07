@@ -6,6 +6,7 @@ import Login from "./page/login";
 import HomePage from "./customers/components/HomePage"
 import Layout from "./customers/pages/Layout";
 import AllProduct from "./customers/components/AllProduct";
+import ShoppingCart from "./customers/components/ShoppingCart";
 
 const AppRoutes = () => (
   <Routes>
@@ -15,6 +16,7 @@ const AppRoutes = () => (
       <Route path="/" element={<Loading />} />
       <Route path="home" element={<HomePage />} />
       <Route path="allproduct" element={<AllProduct />} />
+      <Route path="shoppingcart" element={<ShoppingCart />} />
     </Route>
 
   </Routes>
