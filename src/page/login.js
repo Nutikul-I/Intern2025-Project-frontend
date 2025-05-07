@@ -1,4 +1,3 @@
-// src/components/LoginPage.js
 import React, { useState } from "react";
 
 export default function LoginPage() {
