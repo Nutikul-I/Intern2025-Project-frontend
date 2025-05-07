@@ -81,11 +81,11 @@ export default function LoginPage() {
           <p className="text-xs text-gray-400 text-center mt-6">
             version 1.0.0
           </p>
-          <footer className="mt-8 text-center">
+          <div className="mt-8 text-center">
             <p className="text-xs text-gray-400">
-              © 2025, Made with SmartCanePro
+              © 2025, Made with .....
             </p>
-          </footer>
+          </div>
         </div>
       </div>
 
