@@ -12,11 +12,7 @@ import Login from "./page/login";
 import Register from "./page/register";
 import AllProduct from "./customers/components/AllProduct";
 import ShoppingCart from "./customers/components/ShoppingCart";
-import OrderHistory  from "./customers/components/OrderHistory";
-import ProcessTwo    from "./customers/components/ProcessTwo";
-import ProductDetail from "./customers/components/ProductDetail";
-import Register from "./page/register";
-
+import EditInfo from "./customers/components/EditInfo";
 
 const AppRoutes = () => (
   <Routes>
@@ -32,6 +28,7 @@ const AppRoutes = () => (
       <Route path="productdetail/:id" element={<ProductDetail />} />
       <Route path="allproduct" element={<AllProduct />} />
       <Route path="shoppingcart" element={<ShoppingCart />} />
+      <Route path="editinfo" element={<EditInfo />} />
     </Route>
 
   </Routes>
