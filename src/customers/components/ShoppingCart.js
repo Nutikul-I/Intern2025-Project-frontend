@@ -99,39 +99,45 @@ const ShoppingCart = () => {
       </div>
 
       {/* Summary */}
-      <div className="w-full md:w-1/3 bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-4">สรุปคำสั่งซื้อ</h2>
+      <div className="w-full md:w-1/3 bg-white p-4 sm:p-6 rounded-lg shadow-md">
+        <h2 className="text-lg sm:text-xl font-bold mb-4">สรุปคำสั่งซื้อ</h2>
+
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">โค้ดส่วนลด</label>
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
-              className="flex-1 px-4 py-2 border rounded-l"
+              className="w-full sm:flex-1 px-4 py-2 border rounded"
               placeholder="กรอกโค้ดส่วนลด"
             />
-            <button className="px-4 py-2 bg-gray-800 text-white rounded-r">
+            <button className="w-full sm:w-auto px-4 py-2 bg-gray-800 text-white rounded">
               ยืนยัน
             </button>
           </div>
         </div>
-        <div className="flex justify-between mb-2">
+
+        <div className="flex justify-between mb-2 text-sm sm:text-base">
           <span>ราคาสุทธิ</span>
           <span>{`฿${totalPrice}`}</span>
         </div>
-        <div className="flex justify-between mb-2">
+
+        <div className="flex justify-between mb-2 text-sm sm:text-base">
           <span>ส่วนลด</span>
           <span>{`฿${discount}`}</span>
         </div>
-        <div className="flex justify-between font-bold text-lg mb-4">
+
+        <div className="flex justify-between font-bold text-base sm:text-lg mb-4">
           <span>ราคารวมทั้งสิ้น</span>
           <span>{`฿${finalPrice}`}</span>
         </div>
-        <button className="w-full bg-black text-white py-2 rounded">
+
+        <button className="w-full bg-black text-white py-2 rounded text-sm sm:text-base">
           ยืนยันคำสั่งซื้อ
         </button>
       </div>
+
     </div>
   );
 };
