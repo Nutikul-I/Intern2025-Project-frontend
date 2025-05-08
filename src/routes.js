@@ -16,7 +16,7 @@ import EditInfo from "./customers/components/EditInfo";
 import CheckoutPage from "./customers/components/CheckoutPage";
 
 import LayoutEmployee from "./employees/pages/Layout";
-import DashBoard from "./employees/components/DashBoard";
+import DashBoard from "./employees/components/Dashboard";
 
 const AppRoutes = () => (
   <Routes>
@@ -38,7 +38,6 @@ const AppRoutes = () => (
     <Route element={<LayoutEmployee />}>
       <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
-      {/* <Route path="/dashboard" element={<DashBoard />} /> */}
     </Route>
   </Routes>
 );
