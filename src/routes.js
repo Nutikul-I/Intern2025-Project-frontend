@@ -4,8 +4,7 @@ import OrderHistory from "./customers/components/OrderHistory";
 import Loading from "./page/loading";
 import Login from "./page/login";
 import Layout from  "../src/customers/pages/Layout";
-import HomePage from "./customers/components/HomePage"
-import ProductDetail from "./customers/components/ProductDetail";
+import ProcessTwo from "./customers/components/ProcessTwo";
 
 
 const AppRoutes = () => (
@@ -15,8 +14,8 @@ const AppRoutes = () => (
     <Route element={<Layout/>}>
       <Route path="/" element={<Loading />} />
       <Route path="/orderhistory" element={<OrderHistory />} />
-      <Route path="home" element={<HomePage />} />
-      <Route path="product/:id" element={<ProductDetail />} />
+      <Route path="/processtwo" element={<ProcessTwo />} />
+      
     </Route>
 
   </Routes>
