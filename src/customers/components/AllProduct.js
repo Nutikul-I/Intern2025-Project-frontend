@@ -72,67 +72,67 @@ const AllProduct = () => {
     ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6 p-6 max-w-[1280px] mx-auto">
-            {/* Sidebar */}
-            <aside className="bg-white rounded p-4 text-sm hidden md:block">
-                <div className="flex items-center gap-2 font-semibold text-base mb-3">
-                    <span>หมวดหมู่</span>
-                </div>
-                <input
-                    type="text"
-                    placeholder="ค้นหา"
-                    className="w-full px-3 py-1 mb-4 border border-gray-300 rounded text-sm"
-                />
-                <ul className="space-y-1 text-sm">
-                    {brandList.map((brand) => (
-                        <li key={brand} className="flex items-center gap-2">
-                            <input type="checkbox" className="form-checkbox h-4 w-4" />
-                            <span>{brand}</span>
-                        </li>
-                    ))}
-                </ul>
-            </aside>
-
-            {/* Product Grid */}
-            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-10 justify-items-center">
-                {product.map((item) => (
-                    <div
-                        key={item.id}
-                        className="w-full sm:w-[240px] min-h-[340px] bg-[#f7f7f7] rounded-lg p-4 shadow-[0_1px_4px_rgba(0,0,0,0.1)] hover:shadow-md transition-all mx-auto flex flex-col items-center"
-                    >
-                        <img
-                            src={item.image}
-                            alt={item.productName}
-                            className="w-[180px] h-[180px] object-contain mb-4"
-                        />
-                        <h3 className="text-sm text-center font-medium leading-snug mb-2 line-clamp-2">
-                            {item.productName}
-                        </h3>
-                        <p className="text-lg font-bold text-black mb-4">฿{item.price}</p>
-                        <button className="w-full bg-black text-white text-sm py-1.5 rounded-md">
-                            ซื้อเลย
-                        </button>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6 p-4 md:p-6 max-w-[1280px] mx-auto">
+        {/* Sidebar (Mobile & Desktop) */}
+        <aside className="bg-white rounded p-4 text-sm md:block order-1 md:order-none">
+            <div className="flex items-center gap-2 font-semibold text-base mb-3">
+                <span>หมวดหมู่</span>
+            </div>
+            <input
+                type="text"
+                placeholder="ค้นหา"
+                className="w-full px-3 py-1 mb-4 border border-gray-300 rounded text-sm"
+            />
+            <ul className="space-y-1 text-sm">
+                {brandList.map((brand) => (
+                    <li key={brand} className="flex items-center gap-2">
+                        <input type="checkbox" className="form-checkbox h-4 w-4" />
+                        <span>{brand}</span>
+                    </li>
                 ))}
-            </section>
-
-            {/* Pagination */}
-            <div className="col-span-full flex justify-center mt-8 text-sm">
-                <div className="flex items-center space-x-2">
-                    <button className="px-3 py-1 border rounded hover:bg-gray-100">&lt;</button>
-                    {[1, 2, 3, '...', 12].map((n) => (
-                        <button
-                            key={n}
-                            className={`px-3 py-1 border rounded ${n === 1 ? 'bg-black text-white' : 'hover:bg-gray-100'
-                                }`}
-                        >
-                            {n}
-                        </button>
-                    ))}
-                    <button className="px-3 py-1 border rounded hover:bg-gray-100">&gt;</button>
+            </ul>
+        </aside>
+    
+        {/* Product Grid */}
+        <section className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 order-2">
+            {product.map((item) => (
+                <div
+                    key={item.id}
+                    className="w-full bg-[#f7f7f7] rounded-lg p-4 shadow hover:shadow-md transition-all flex flex-col items-center"
+                >
+                    <img
+                        src={item.image}
+                        alt={item.productName}
+                        className="w-[150px] h-[150px] object-contain mb-4"
+                    />
+                    <h3 className="text-sm text-center font-medium leading-snug mb-2 line-clamp-2">
+                        {item.productName}
+                    </h3>
+                    <p className="text-lg font-bold text-black mb-4">฿{item.price}</p>
+                    <button className="w-full bg-black text-white text-sm py-1.5 rounded-md">
+                        ซื้อเลย
+                    </button>
                 </div>
+            ))}
+        </section>
+    
+        {/* Pagination */}
+        <div className="col-span-full flex justify-center mt-8 text-sm order-3">
+            <div className="flex items-center space-x-2">
+                <button className="px-3 py-1 border rounded hover:bg-gray-100">&lt;</button>
+                {[1, 2, 3, '...', 12].map((n) => (
+                    <button
+                        key={n}
+                        className={`px-3 py-1 border rounded ${n === 1 ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
+                    >
+                        {n}
+                    </button>
+                ))}
+                <button className="px-3 py-1 border rounded hover:bg-gray-100">&gt;</button>
             </div>
         </div>
+    </div>
+    
     );
 };
 
