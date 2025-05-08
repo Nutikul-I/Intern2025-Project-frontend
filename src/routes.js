@@ -15,6 +15,9 @@ import ShoppingCart from "./customers/components/ShoppingCart";
 import EditInfo from "./customers/components/EditInfo";
 import CheckoutPage from "./customers/components/CheckoutPage";
 
+import LayoutEmployee from "./employees/pages/Layout";
+import DashBoard from "./employees/components/DashBoard";
+
 const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
@@ -31,7 +34,12 @@ const AppRoutes = () => (
       <Route path="editinfo" element={<EditInfo />} />
       <Route path="checkout" element={<CheckoutPage />} />
     </Route>
-
+    
+    <Route element={<LayoutEmployee />}>
+      <Route path="/employee" element={<Loading />} />
+      <Route path="/employee/dashboard" element={<DashBoard />} />
+      {/* <Route path="/dashboard" element={<DashBoard />} /> */}
+    </Route>
   </Routes>
 );
 
