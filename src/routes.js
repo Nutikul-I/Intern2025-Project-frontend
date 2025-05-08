@@ -13,6 +13,7 @@ import Register from "./page/register";
 import AllProduct from "./customers/components/AllProduct";
 import ShoppingCart from "./customers/components/ShoppingCart";
 import EditInfo from "./customers/components/EditInfo";
+import CheckoutPage from "./customers/components/CheckoutPage";
 
 const AppRoutes = () => (
   <Routes>
@@ -25,10 +26,11 @@ const AppRoutes = () => (
       <Route path="home" element={<HomePage />} />
       <Route path="orderhistory" element={<OrderHistory />} />
       <Route path="processtwo" element={<ProcessTwo />} />
-      <Route path="productdetail/:id" element={<ProductDetail />} />
+      <Route path="product/:id" element={<ProductDetail />} />
       <Route path="allproduct" element={<AllProduct />} />
       <Route path="shoppingcart" element={<ShoppingCart />} />
       <Route path="editinfo" element={<EditInfo />} />
+      <Route path="checkout" element={<CheckoutPage />} />
     </Route>
 
   </Routes>
