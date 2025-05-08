@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProcessOne from "./ProcessOne";
 import ProcessBar from "./ProcessBar";
-// import ProcessTwo from "./ProcessTwo";
+import ProcessTwo from "./ProcessTwo";
 
 const CheckoutPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
@@ -27,15 +27,15 @@ const CheckoutPage = () => {
                 />
             )}
             {currentStep === 2 && (
-                //   <ProcessTwo
-                //     data={formData.shipping}
-                //     onNext={(data) => updateStepData("shipping", data)}
-                //     onBack={() => setCurrentStep(1)}
-                //   />
-                <div className="flex justify-center items-center h-screen">
-                    <h1 className="text-2xl font-bold">Shipping Method</h1>
-                    <p className="mt-4">Choose your shipping method here.</p>
-                </div>
+                  <ProcessTwo
+                    data={formData.shipping}
+                    onNext={(data) => updateStepData("shipping", data)}
+                    onBack={() => setCurrentStep(1)}
+                  />
+                // <div className="flex justify-center items-center h-screen">
+                //     <h1 className="text-2xl font-bold">Shipping Method</h1>
+                //     <p className="mt-4">Choose your shipping method here.</p>
+                // </div>
             )}
             {currentStep === 3 && (
                 //   <ProcessTwo
