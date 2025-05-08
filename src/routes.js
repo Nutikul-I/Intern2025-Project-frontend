@@ -7,6 +7,7 @@ import HomePage from "./customers/components/HomePage"
 import Layout from "./customers/pages/Layout";
 import AllProduct from "./customers/components/AllProduct";
 import ShoppingCart from "./customers/components/ShoppingCart";
+import EditInfo from "./customers/components/EditInfo";
 
 const AppRoutes = () => (
   <Routes>
@@ -17,6 +18,7 @@ const AppRoutes = () => (
       <Route path="home" element={<HomePage />} />
       <Route path="allproduct" element={<AllProduct />} />
       <Route path="shoppingcart" element={<ShoppingCart />} />
+      <Route path="editinfo" element={<EditInfo />} />
     </Route>
 
   </Routes>
