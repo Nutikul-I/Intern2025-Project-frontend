@@ -6,6 +6,7 @@ import Login from "./page/login";
 import HomePage from "./customers/components/HomePage"
 import Layout from "./customers/pages/Layout";
 import ProductDetail from "./customers/components/ProductDetail";
+import CheckoutPage from "./customers/components/CheckoutPage";
 
 const AppRoutes = () => (
   <Routes>
@@ -14,6 +15,7 @@ const AppRoutes = () => (
       <Route path="/" element={<Loading />} />
       <Route path="home" element={<HomePage />} />
       <Route path="product/:id" element={<ProductDetail />} />
+      <Route path="checkout" element={<CheckoutPage />} />
     </Route>
   </Routes>
 );
