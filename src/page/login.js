@@ -8,9 +8,9 @@ export default function LoginPage() {
   const handleLogin = (e) => {
     e.preventDefault();
     // auth logic…
-    if (email === "admin" && password === "password") {
+    if (email === "admin@gmail.com" && password === "password") {
       localStorage.setItem("ez-acc-tk", "your-token-here");
-      window.location.href = "/console";
+      window.location.href = "/home";
     } else {
       alert("Invalid username or password");
     }

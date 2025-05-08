@@ -5,10 +5,12 @@ import Loading from "./page/loading";
 import Login from "./page/login";
 import HomePage from "./customers/components/HomePage"
 import Layout from "./customers/pages/Layout";
+import Register from "./page/register";
 
 const AppRoutes = () => (
   <Routes>
     <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
 
     <Route element={<Layout />}>
       <Route path="/" element={<Loading />} />
