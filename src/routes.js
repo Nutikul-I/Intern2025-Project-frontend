@@ -12,6 +12,11 @@ import Login from "./page/login";
 import Register from "./page/register";
 import AllProduct from "./customers/components/AllProduct";
 import ShoppingCart from "./customers/components/ShoppingCart";
+import OrderHistory  from "./customers/components/OrderHistory";
+import ProcessTwo    from "./customers/components/ProcessTwo";
+import ProductDetail from "./customers/components/ProductDetail";
+import Register from "./page/register";
+
 
 const AppRoutes = () => (
   <Routes>
