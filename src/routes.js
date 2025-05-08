@@ -13,11 +13,11 @@ import Register from "./page/register";
 
 const AppRoutes = () => (
   <Routes>
-    {/* public pages */}
+
     <Route path="/login"    element={<Login />} />
     <Route path="/register" element={<Register />} />
 
-    {/* protected pages under Layout */}
+
     <Route element={<Layout />}>
       <Route index             element={<Loading />} />
       <Route path="home"       element={<HomePage />} />
