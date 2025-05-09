@@ -5,7 +5,6 @@ import OrderHistory from "./customers/components/OrderHistory";
 import ProcessTwo from "./customers/components/ProcessTwo";
 import ProductDetail from "./customers/components/ProductDetail";
 import HomePage from "./customers/components/HomePage";
-
 import Layout from "./customers/pages/Layout";
 import Loading from "./page/loading";
 import Login from "./page/login";
@@ -14,7 +13,6 @@ import AllProduct from "./customers/components/AllProduct";
 import ShoppingCart from "./customers/components/ShoppingCart";
 import EditInfo from "./customers/components/EditInfo";
 import CheckoutPage from "./customers/components/CheckoutPage";
-
 import LayoutEmployee from "./employees/pages/Layout";
 import DashBoard from "./employees/components/Dashboard";
 
@@ -38,6 +36,9 @@ const AppRoutes = () => (
     <Route element={<LayoutEmployee />}>
       <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
+
+      
+
     </Route>
   </Routes>
 );
