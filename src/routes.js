@@ -15,6 +15,7 @@ import EditInfo from "./customers/components/EditInfo";
 import CheckoutPage from "./customers/components/CheckoutPage";
 import LayoutEmployee from "./employees/pages/Layout";
 import DashBoard from "./employees/components/Dashboard";
+import CustomerInfo from "./employees/components/CustomerInfo";
 
 const AppRoutes = () => (
   <Routes>
@@ -37,6 +38,7 @@ const AppRoutes = () => (
     <Route element={<LayoutEmployee />}>
       <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
+      <Route path="/employee/customer" element={<CustomerInfo />} />
     </Route>
   </Routes>
 );
