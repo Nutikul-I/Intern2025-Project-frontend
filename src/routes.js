@@ -26,6 +26,8 @@ const AppRoutes = () => (
       <Route path="productdetail/:id" element={<ProductDetail />} />
     </Route>
   </Routes>
+
+  
 );
 
 export default AppRoutes;
