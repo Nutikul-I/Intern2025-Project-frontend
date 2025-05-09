@@ -20,6 +20,7 @@ import DashBoard from "./employees/components/Dashboard";
 import CustomerInfo from "./employees/components/CustomerInfo";
 import Employees from "./employees/components/Employee";
 import Permission from "./employees/components/Permission";
+import ProductAdd from "./employees/components/Product";
 
 const AppRoutes = () => (
   <Routes>
@@ -48,6 +49,7 @@ const AppRoutes = () => (
       <Route path="/employee/customer" element={<CustomerInfo />} />
       <Route path="/employee/employee" element={<Employees />} />
       <Route path="/employee/permission" element={<Permission />} />
+      <Route path="/employee/product" element={<ProductAdd />} />
     
     </Route>
   </Routes>
