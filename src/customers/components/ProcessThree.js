@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 export default function ProcessThree() {
   const navigate = useNavigate();
 
-  /* -------- mock summary (เปลี่ยนเป็น context / API ได้) -------- */
   const order = {
     items: [
       {

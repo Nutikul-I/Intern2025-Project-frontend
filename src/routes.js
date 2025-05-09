@@ -38,6 +38,7 @@ const AppRoutes = () => (
       <Route path="shoppingcart" element={<ShoppingCart />} />
       <Route path="editinfo" element={<EditInfo />} />
       <Route path="checkout" element={<CheckoutPage />} />
+      <Route path="process" element={<ProcessTwo />} />
     </Route>
     
     <Route element={<LayoutEmployee />}>
@@ -46,6 +47,7 @@ const AppRoutes = () => (
       <Route path="/employee/employee" element={<Employees />} />
       <Route path="/employee/permission" element={<Permission />} />
       
+
 
     </Route>
   </Routes>
