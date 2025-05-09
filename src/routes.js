@@ -2,7 +2,9 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import OrderHistory from "./customers/components/OrderHistory";
+import ProcessOne from "./customers/components/ProcessOne";
 import ProcessTwo from "./customers/components/ProcessTwo";
+import ProcessThree from "./customers/components/ProcessThree";
 import ProductDetail from "./customers/components/ProductDetail";
 import HomePage from "./customers/components/HomePage";
 import Layout from "./customers/pages/Layout";
@@ -16,6 +18,8 @@ import CheckoutPage from "./customers/components/CheckoutPage";
 import LayoutEmployee from "./employees/pages/Layout";
 import DashBoard from "./employees/components/Dashboard";
 import CustomerInfo from "./employees/components/CustomerInfo";
+import Employees from "./employees/components/Employee";
+import Permission from "./employees/components/Permission";
 
 const AppRoutes = () => (
   <Routes>
@@ -27,6 +31,9 @@ const AppRoutes = () => (
       <Route path="/" element={<Loading />} />
       <Route path="home" element={<HomePage />} />
       <Route path="orderhistory" element={<OrderHistory />} />
+      <Route path="processOne" element={<ProcessOne />} />
+      <Route path="processtwo" element={<ProcessTwo />} />
+      <Route path="processtree" element={<ProcessThree />} />
       <Route path="product/:id" element={<ProductDetail />} />
       <Route path="allproduct" element={<AllProduct />} />
       <Route path="shoppingcart" element={<ShoppingCart />} />
@@ -39,6 +46,9 @@ const AppRoutes = () => (
       <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
       <Route path="/employee/customer" element={<CustomerInfo />} />
+      <Route path="/employee/employee" element={<Employees />} />
+      <Route path="/employee/permission" element={<Permission />} />
+    
     </Route>
   </Routes>
 );
