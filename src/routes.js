@@ -31,14 +31,12 @@ const AppRoutes = () => (
       <Route path="shoppingcart" element={<ShoppingCart />} />
       <Route path="editinfo" element={<EditInfo />} />
       <Route path="checkout" element={<CheckoutPage />} />
+      <Route path="process" element={<ProcessTwo />} />
     </Route>
     
     <Route element={<LayoutEmployee />}>
       <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
-
-      
-
     </Route>
   </Routes>
 );
