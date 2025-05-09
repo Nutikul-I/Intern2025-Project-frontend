@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 //import { ArrowRight, ArrowLeft, Truck, Home, CreditCard } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import ProcessBar from "./ProcessBar";
 
+<ProcessBar/>
 export default function ProcessTwo() {
   console.log("ProcessTwo loaded");           // Debug
   const [options, setOptions] = useState([]);

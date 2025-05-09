@@ -97,10 +97,10 @@ const Sidebar = ({ currentPath }) => {
                     {/* system section*/}
                     <div className={sectionTitleClass}>ตั้งค่าระบบ</div>
                     <MenuItem
-                        active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        active={currentPath === "/employee/permission"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/permission")} />}
+                        component={<Link to="/employee/permission" />}
+                        className={itemClass(currentPath === "/employee/permission")}
                     >
                         สิทธิ์ผู้ใช้งาน
                     </MenuItem>
