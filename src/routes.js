@@ -30,6 +30,7 @@ import OrderList from "./employees/components/OrderList";
 import EditStock from "./employees/components/EditStock";
 import Review from "./employees/components/Review";
 
+import ProductAdd from "./employees/components/Product";
 
 const AppRoutes = () => (
   <Routes>
@@ -65,9 +66,12 @@ const AppRoutes = () => (
       <Route path="/employee/product" element={<Product />} />
       <Route path="/employee/addproduct" element={<AddProduct />} />
       <Route path="/employee/orderlist" element={<OrderList />} />
-      <Route path="/employee/editstock" element={<EditStock />} />      <Route path="/employee/review" element={<Review />} />
+      <Route path="/employee/editstock" element={<EditStock />} />      
+      <Route path="/employee/review" element={<Review />} />
 
 
+      <Route path="/employee/product" element={<ProductAdd />} />
+    
     </Route>
   </Routes>
 );
