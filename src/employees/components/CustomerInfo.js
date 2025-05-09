@@ -95,11 +95,11 @@ export default function CustomerInfo() {
   /* ---------- UI ---------- */
   return (
   <>
-     <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-8">
+     <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
     <div className="bg-white shadow-sm rounded-lg overflow-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
-        <h1 className="text-lg sm:text-xl font-semibold">ข้อมูลลูกค้า</h1>
+        <h1 className="text-lg sm:text-xl font-semibold">ลูกค้า</h1>
         <button
           onClick={openAdd}
           className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
