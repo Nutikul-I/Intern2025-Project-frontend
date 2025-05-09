@@ -501,8 +501,8 @@ const ProductDetail = ({ id }) => {
                             className="mt-2 px-4 py-1 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100 transition"
                         >
                             <div className="flex items-center justify-center gap-1">
-                                {showAll ? 'View less' : 'View more '}
-                                {showAll ? <FiChevronUp className="text-base" /> : <FiChevronDown className="text-base" />}
+                                {showAllReview ? 'View less' : 'View more '}
+                                {showAllReview ? <FiChevronUp className="text-base" /> : <FiChevronDown className="text-base" />}
                             </div>
                         </button>
                     </div>
