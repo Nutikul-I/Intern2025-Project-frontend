@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import OrderHistory from "./customers/components/OrderHistory";
-import ProcessTwo from "./customers/components/ProcessTwo";
 import ProductDetail from "./customers/components/ProductDetail";
 import HomePage from "./customers/components/HomePage";
 
@@ -17,6 +16,7 @@ import CheckoutPage from "./customers/components/CheckoutPage";
 
 import LayoutEmployee from "./employees/pages/Layout";
 import DashBoard from "./employees/components/Dashboard";
+import Category from "./employees/components/Category";
 
 const AppRoutes = () => (
   <Routes>
@@ -38,6 +38,7 @@ const AppRoutes = () => (
     <Route element={<LayoutEmployee />}>
       <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
+      <Route path="/employee/category" element={<Category />} />
     </Route>
   </Routes>
 );
