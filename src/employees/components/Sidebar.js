@@ -19,12 +19,12 @@ const Sidebar = ({ currentPath }) => {
             <ProSidebar
                 className="h-screen bg-gray-100 p-2 w-[250px] relative"
             >
-                <div className="text-center mb-5">
+                <div className="text-center mb-5 bg-gray-100">
                     {/* <img src={logo} alt="Logo" className="w-[60px] h-[60px] mx-auto" /> */}
                     <p className="text-2xl font-bold text-gray-800">PAYZ</p>
                 </div>
 
-                <Menu>
+                <Menu className="bg-gray-100">
                     <MenuItem
                         active={currentPath === "/employee/dashboard"}
                         icon={<FaHome className={iconClass(currentPath === "/employee/dashboard")} />}
@@ -106,10 +106,10 @@ const Sidebar = ({ currentPath }) => {
                     </MenuItem>
 
                     <MenuItem
-                        active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        active={currentPath === "/employee/category"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/category")} />}
+                        component={<Link to="/employee/category" />}
+                        className={itemClass(currentPath === "/employee/category")}
                     >
                         หมวดหมู่
                     </MenuItem>
