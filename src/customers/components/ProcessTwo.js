@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ProcessBar from "./ProcessBar";
 
-export default function ProcessTwo({ onNext, onBack }) {
+export default function ProcessTwo({ data, onNext, onBack }) {
   const [options, setOptions] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(true);
