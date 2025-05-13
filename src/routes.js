@@ -46,10 +46,6 @@ const AppRoutes = () => (
     <Route element={<LayoutEmployee />}>
       <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
-      <Route path="/employee/customer" element={<CustomerInfo />} />
-      <Route path="/employee/employee" element={<Employees />} />
-      <Route path="/employee/permission" element={<Permission />} />
-      <Route path="/employee/category" element={<Category />} />
     </Route>
   </Routes>
 );
