@@ -44,7 +44,7 @@ const AppRoutes = () => (
       <Route path="orderhistory/:id" element={<OrderHistoryDetail />} />
       <Route path="processOne" element={<ProcessOne />} />
       <Route path="processtwo" element={<ProcessTwo />} />
-      <Route path="processtree" element={<ProcessThree />} />
+      <Route path="processthree" element={<ProcessThree />} />
       <Route path="product/:id" element={<ProductDetail />} />
       <Route path="allproduct" element={<AllProduct />} />
       <Route path="shoppingcart" element={<ShoppingCart />} />
