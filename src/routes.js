@@ -23,6 +23,7 @@ import Permission from "./employees/components/Permission";
 import Category from "./employees/components/Category";
 import CountingUnit from "./employees/components/CountingUnit";
 import Discount from "./employees/components/Discount";
+import OrderHistoryDetail from "./customers/components/OrderHistoryDetail";
 
 const AppRoutes = () => (
   <Routes>
@@ -34,6 +35,7 @@ const AppRoutes = () => (
       <Route path="/" element={<Loading />} />
       <Route path="home" element={<HomePage />} />
       <Route path="orderhistory" element={<OrderHistory />} />
+      <Route path="orderhistory/:id" element={<OrderHistoryDetail />} />
       <Route path="processOne" element={<ProcessOne />} />
       <Route path="processtwo" element={<ProcessTwo />} />
       <Route path="processtree" element={<ProcessThree />} />
