@@ -113,6 +113,15 @@ const Sidebar = ({ currentPath }) => {
                     >
                         หมวดหมู่
                     </MenuItem>
+
+                    <MenuItem
+                        active={currentPath === "/employee/discount"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/discount")} />}
+                        component={<Link to="/employee/discount" />}
+                        className={itemClass(currentPath === "/employee/discount")}
+                    >
+                        ส่วนลด
+                    </MenuItem>
                     
                     <MenuItem
                         active={currentPath === "/employee/"}

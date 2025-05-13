@@ -22,6 +22,7 @@ import Employees from "./employees/components/Employee";
 import Permission from "./employees/components/Permission";
 import Category from "./employees/components/Category";
 import CountingUnit from "./employees/components/CountingUnit";
+import Discount from "./employees/components/Discount";
 
 const AppRoutes = () => (
   <Routes>
@@ -52,6 +53,7 @@ const AppRoutes = () => (
       <Route path="/employee/permission" element={<Permission />} />
       <Route path="/employee/category" element={<Category />} />
       <Route path="/employee/countingUnit" element={<CountingUnit />} />
+      <Route path="/employee/discount" element={<Discount />} />
     </Route>
   </Routes>
 );
