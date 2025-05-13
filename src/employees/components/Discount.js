@@ -73,7 +73,7 @@ export default function Discount() {
     return (
         <div className="p-6 bg-white rounded-xl shadow">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">หมวดหมู่</h2>
+                <h2 className="text-xl font-bold">ส่วนลด</h2>
                 <button
                     onClick={() => setIsModalOpen(true)}
                     className="bg-black text-white px-4 py-2 rounded-lg"
