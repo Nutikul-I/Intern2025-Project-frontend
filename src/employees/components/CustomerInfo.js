@@ -17,32 +17,16 @@ import AddressModal from "./CustomerAddressModal.js";
 
 export default function CustomerInfo() {
   /* ---------- mock data ---------- */
-  const [customers, setCustomers] = useState([
-    {
-      id: 1,
-      code: "0000001",
-      fullName: "นายทดสอบ นามสกุลสมบูรณ์",
-      email: "test@example.com",
-      phone: "0999999999",
-      addresses: [],
-    },
-    {
-      id: 2,
-      code: "0000002",
-      fullName: "Jane Doe",
-      email: "jane@example.com",
-      phone: "0898888888",
-      addresses: [],
-    },
-    {
-      id: 3,
-      code: "0000003",
-      fullName: "John Smith",
-      email: "john@example.com",
-      phone: "0897777777",
-      addresses: [],
-    },
-  ]);
+  const [customers, setCustomers] = useState(
+  Array.from({ length: 53 }).map((_, i) => ({
+    id: i + 1,
+    code: String(i + 1).padStart(7, "0"),        // 0000001, 0000002, ...
+    fullName: `ลูกค้าทดสอบ #${i + 1}`,
+    email: `customer${i + 1}@example.com`,
+    phone: `08${String(i + 1).padStart(8, "0")}`, // 0800000001, 0800000002, ...
+    addresses: [],
+  }))
+);
 
   /* ---------- modal states ---------- */
   const [showForm, setShowForm] = useState(false);
@@ -164,7 +148,7 @@ export default function CustomerInfo() {
                 </tr>
               </thead>
               <tbody>
-                {customers.map((c) => (
+                {currentCustomers.map((c) => (
                   <tr key={c.id} className="border-t">
                     <td className="px-2 sm:px-4 py-1 sm:py-3">{c.code}</td>
                     <td className="px-2 sm:px-4 py-1 sm:py-3">{c.fullName}</td>
