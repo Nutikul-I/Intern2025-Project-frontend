@@ -22,13 +22,10 @@ import Employees from "./employees/components/Employee";
 import Permission from "./employees/components/Permission";
 import Category from "./employees/components/Category";
 import CountingUnit from "./employees/components/CountingUnit";
-<<<<<<< HEAD
 import Discount from "./employees/components/Discount";
 import Product from "./employees/components/Product";
 import OrderHistoryDetail from "./customers/components/OrderHistoryDetail";
-=======
 import AddProduct from "./employees/components/AddProduct";
->>>>>>> featuer/empImportGoods
 
 const AppRoutes = () => (
   <Routes>
@@ -43,7 +40,7 @@ const AppRoutes = () => (
       <Route path="orderhistory/:id" element={<OrderHistoryDetail />} />
       <Route path="processOne" element={<ProcessOne />} />
       <Route path="processtwo" element={<ProcessTwo />} />
-      <Route path="processthree" element={<ProcessThree />} />
+      <Route path="processtree" element={<ProcessThree />} />
       <Route path="product/:id" element={<ProductDetail />} />
       <Route path="allproduct" element={<AllProduct />} />
       <Route path="shoppingcart" element={<ShoppingCart />} />
@@ -60,13 +57,9 @@ const AppRoutes = () => (
       <Route path="/employee/permission" element={<Permission />} />
       <Route path="/employee/category" element={<Category />} />
       <Route path="/employee/countingUnit" element={<CountingUnit />} />
-<<<<<<< HEAD
       <Route path="/employee/discount" element={<Discount />} />
       <Route path="/employee/product" element={<Product />} />
-    
-=======
       <Route path="/employee/addproduct" element={<AddProduct />} />
->>>>>>> featuer/empImportGoods
     </Route>
   </Routes>
 );
