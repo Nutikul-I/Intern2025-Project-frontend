@@ -26,6 +26,7 @@ import Discount from "./employees/components/Discount";
 import Product from "./employees/components/Product";
 import OrderHistoryDetail from "./customers/components/OrderHistoryDetail";
 import AddProduct from "./employees/components/AddProduct";
+import EditStock from "./employees/components/EditStock";
 
 const AppRoutes = () => (
   <Routes>
@@ -60,6 +61,7 @@ const AppRoutes = () => (
       <Route path="/employee/discount" element={<Discount />} />
       <Route path="/employee/product" element={<Product />} />
       <Route path="/employee/addproduct" element={<AddProduct />} />
+      <Route path="/employee/editstock" element={<EditStock />} />
     </Route>
   </Routes>
 );
