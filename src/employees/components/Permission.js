@@ -1,112 +1,140 @@
-//สิทธิ์ผู้ใช้งาน
-// src/components/EmployeePage.jsx
-import React, { useState } from "react";
-import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
+import { Pencil, Trash2 } from "lucide-react";
+import PermissionModal from "../components/PermissionModal";
 
-export default function EmployeePage() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [employees, setEmployees] = useState([
-    {
-      code: "0000001",
-      name: "นายทดสอบ นามสกุลสมมติ",
-      email: "อีเมล",
-      phone: "0999999999",
-      role: "ตำแหน่ง",
-    },
-    {
-      code: "0000002",
-      name: "นางสาวตัวอย่าง สมมุติ",
-      email: "example@email.com",
-      phone: "0888888888",
-      role: "ผู้ดูแลระบบ",
-    },
-  ]);
+export default function UserRolePage() {
+  const [roles, setRoles] = useState([]);
+  const [currentPage, setCurrentPage] = useState(6);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(null);
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    setModalOpen(false);
-    Swal.fire({
-      icon: "success",
-      title: "บันทึกข้อมูลสำเร็จ",
-      confirmButtonText: "ตกลง",
-      confirmButtonColor: "#000",
+  const itemsPerPage = 10;
+  const totalItems = 85;
+
+  useEffect(() => {
+    setRoles([
+      {
+        id: "0000001",
+        name: "ผู้จัดการ",
+        description: "ลูกค้า, พนักงาน, สิทธิ์ผู้ใช้งาน, สินค้า, นำเข้าสินค้า",
+        permissions: {
+          ลูกค้า: { ดู: true },
+          พนักงาน: { ดู: true },
+        },
+      },
+    ]);
+  }, [currentPage]);
+
+  const handleSaveRole = (newRole) => {
+    setRoles((prev) => {
+      if (selectedRole) {
+        return prev.map((r) =>
+          r.id === selectedRole.id ? { ...r, ...newRole } : r
+        );
+      } else {
+        return [...prev, { id: String(Date.now()), ...newRole }];
+      }
     });
+    setShowModal(false);
+    setSelectedRole(null);
+  };
+
+  const handleEdit = (role) => {
+    setSelectedRole(role);
+    setShowModal(true);
   };
 
   return (
-    <div className="p-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">พนักงาน</h2>
+    <div className="min-h-screen bg-gray-100 px-4 sm:px-6 py-8 flex justify-center">
+      <div className="w-full max-w-6xl">
+
+        {/* Header (ไม่มี margin-bottom แล้ว) */}
+        <div className="bg-white rounded-t-xl shadow-sm p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h2 className="text-lg font-semibold text-gray-800">สิทธิ์ผู้ใช้งาน</h2>
           <button
-            className="bg-black text-white px-4 py-2 rounded"
-            onClick={() => setModalOpen(true)}
+            onClick={() => {
+              setSelectedRole(null);
+              setShowModal(true);
+            }}
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 text-sm w-full sm:w-auto"
           >
             เพิ่มข้อมูล
           </button>
         </div>
 
-        <table className="w-full table-auto">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-2">รหัส</th>
-              <th className="px-4 py-2">ชื่อ - นามสกุล</th>
-              <th className="px-4 py-2">อีเมล</th>
-              <th className="px-4 py-2">เบอร์โทรศัพท์</th>
-              <th className="px-4 py-2">สิทธิ์ผู้ใช้งาน</th>
-              <th className="px-4 py-2">จัดการ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {employees.map((emp, index) => (
-              <tr key={index} className="text-center border-t">
-                <td className="px-4 py-2">{emp.code}</td>
-                <td className="px-4 py-2">{emp.name}</td>
-                <td className="px-4 py-2">{emp.email}</td>
-                <td className="px-4 py-2">{emp.phone}</td>
-                <td className="px-4 py-2">{emp.role}</td>
-                <td className="px-4 py-2">
-                  <button className="text-yellow-500 mr-2">✏️</button>
-                  <button className="text-red-500">🗑️</button>
-                </td>
+        {/* Table (ชิดติดกับ header และใช้ rounded-b) */}
+        <div className="overflow-x-auto w-full bg-white rounded-b-xl shadow-sm">
+          <table className="w-full text-xs sm:text-sm text-left">
+            <thead className="text-gray-600 border-b bg-white">
+              <tr>
+                <th className="px-3 py-2 sm:px-6 sm:py-3 whitespace-nowrap">รหัส</th>
+                <th className="px-3 py-2 sm:px-6 sm:py-3 whitespace-nowrap">ชื่อสิทธิ์ผู้ใช้</th>
+                <th className="px-3 py-2 sm:px-6 sm:py-3 whitespace-nowrap">รายละเอียด</th>
+                <th className="px-3 py-2 sm:px-6 sm:py-3 text-right whitespace-nowrap">จัดการ</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {roles.map((role) => (
+                <tr key={role.id} className="hover:bg-gray-50 border-b">
+                  <td className="px-3 py-2 sm:px-6 sm:py-3">{role.id}</td>
+                  <td className="px-3 py-2 sm:px-6 sm:py-3">{role.name}</td>
+                  <td className="px-3 py-2 sm:px-6 sm:py-3">{role.description}</td>
+                  <td className="px-3 py-2 sm:px-6 sm:py-3 text-right">
+                    <div className="inline-flex gap-2">
+                      <button
+                        className="text-yellow-500 hover:text-yellow-600"
+                        onClick={() => handleEdit(role)}
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button className="text-red-500 hover:text-red-600">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      {/* Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">พนักงาน</h3>
-              <button onClick={() => setModalOpen(false)}>❌</button>
-            </div>
-            <form onSubmit={handleSave} className="space-y-3">
-              <input className="w-full border px-3 py-2 rounded" placeholder="ชื่อ-นามสกุล" />
-              <input className="w-full border px-3 py-2 rounded" placeholder="เบอร์โทรศัพท์" />
-              <input className="w-full border px-3 py-2 rounded" placeholder="อีเมล" />
-              <select className="w-full border px-3 py-2 rounded">
-                <option>เลือกสิทธิ์</option>
-                <option>ผู้ใช้งาน</option>
-                <option>แอดมิน</option>
-              </select>
-              <input className="w-full border px-3 py-2 rounded" placeholder="ชื่อผู้ใช้" />
-              <input className="w-full border px-3 py-2 rounded" placeholder="รหัสผ่าน" type="password" />
-              <input className="w-full border px-3 py-2 rounded" placeholder="ยืนยันรหัสผ่าน" type="password" />
-              <div className="flex justify-end space-x-2">
-                <button type="button" onClick={() => setModalOpen(false)} className="border px-4 py-2 rounded">
-                  ยกเลิก
-                </button>
-                <button type="submit" className="bg-black text-white px-4 py-2 rounded">
-                  บันทึก
-                </button>
-              </div>
-            </form>
+        {/* Pagination */}
+        <div className="text-sm text-gray-600 flex flex-col md:flex-row justify-between md:items-center items-start gap-4 mt-6">
+          <div className="px-1">
+            แสดง {(currentPage - 1) * itemsPerPage + 1} -{" "}
+            {Math.min(currentPage * itemsPerPage, totalItems)} จากทั้งหมด {totalItems} รายการ
+          </div>
+          <div className="flex flex-wrap items-center gap-1 px-1">
+            {[1, "...", 4, 5, 6, "...", 20].map((num, i) => (
+              <button
+                key={i}
+                disabled={num === "..."}
+                onClick={() => typeof num === "number" && setCurrentPage(num)}
+                className={`w-8 h-8 rounded border text-sm flex items-center justify-center transition ${
+                  num === currentPage
+                    ? "bg-black text-white border-black"
+                    : num === "..."
+                    ? "text-gray-400 cursor-default border-transparent"
+                    : "hover:bg-gray-200 border border-gray-300"
+                }`}
+              >
+                {num}
+              </button>
+            ))}
           </div>
         </div>
-      )}
+
+        {/* Modal */}
+        <PermissionModal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedRole(null);
+          }}
+          onSave={handleSaveRole}
+          defaultData={selectedRole}
+        />
+      </div>
     </div>
   );
 }
