@@ -3,38 +3,46 @@ import { Pencil, Trash2 } from "lucide-react";
 import PermissionModal from "../components/PermissionModal";
 
 export default function UserRolePage() {
+  const [allRoles, setAllRoles] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [currentPage, setCurrentPage] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
 
   const itemsPerPage = 10;
   const totalItems = 85;
 
+  // สร้างข้อมูลทั้งหมด 85 รายการ
   useEffect(() => {
-    setRoles([
-      {
-        id: "0000001",
-        name: "ผู้จัดการ",
-        description: "ลูกค้า, พนักงาน, สิทธิ์ผู้ใช้งาน, สินค้า, นำเข้าสินค้า",
-        permissions: {
-          ลูกค้า: { ดู: true },
-          พนักงาน: { ดู: true },
-        },
+    const fakeData = Array.from({ length: totalItems }, (_, index) => ({
+      id: String(index + 1).padStart(7, "0"),
+      name: `สิทธิ์ที่ ${index + 1}`,
+      description: `รายละเอียดของสิทธิ์ที่ ${index + 1}`,
+      permissions: {
+        ลูกค้า: { ดู: true },
+        พนักงาน: { ดู: true },
       },
-    ]);
-  }, [currentPage]);
+    }));
+    setAllRoles(fakeData);
+  }, []);
+
+  // อัปเดตรายการตามหน้าที่เลือก
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setRoles(allRoles.slice(startIndex, endIndex));
+  }, [currentPage, allRoles]);
 
   const handleSaveRole = (newRole) => {
-    setRoles((prev) => {
-      if (selectedRole) {
-        return prev.map((r) =>
-          r.id === selectedRole.id ? { ...r, ...newRole } : r
-        );
-      } else {
-        return [...prev, { id: String(Date.now()), ...newRole }];
-      }
-    });
+    if (selectedRole) {
+      const updatedAllRoles = allRoles.map((r) =>
+        r.id === selectedRole.id ? { ...r, ...newRole } : r
+      );
+      setAllRoles(updatedAllRoles);
+    } else {
+      const newId = String(Date.now());
+      setAllRoles([{ id: newId, ...newRole }, ...allRoles]);
+    }
     setShowModal(false);
     setSelectedRole(null);
   };
@@ -48,7 +56,7 @@ export default function UserRolePage() {
     <div className="min-h-screen bg-gray-100 px-4 sm:px-6 py-8 flex justify-center">
       <div className="w-full max-w-6xl">
 
-        {/* Header (ไม่มี margin-bottom แล้ว) */}
+        {/* Header */}
         <div className="bg-white rounded-t-xl shadow-sm p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-lg font-semibold text-gray-800">สิทธิ์ผู้ใช้งาน</h2>
           <button
@@ -62,7 +70,7 @@ export default function UserRolePage() {
           </button>
         </div>
 
-        {/* Table (ชิดติดกับ header และใช้ rounded-b) */}
+        {/* Table */}
         <div className="overflow-x-auto w-full bg-white rounded-b-xl shadow-sm">
           <table className="w-full text-xs sm:text-sm text-left">
             <thead className="text-gray-600 border-b bg-white">
@@ -100,21 +108,18 @@ export default function UserRolePage() {
 
         {/* Pagination */}
         <div className="text-sm text-gray-600 flex flex-col md:flex-row justify-between md:items-center items-start gap-4 mt-6">
-          <div className="px-1">
+          <div>
             แสดง {(currentPage - 1) * itemsPerPage + 1} -{" "}
             {Math.min(currentPage * itemsPerPage, totalItems)} จากทั้งหมด {totalItems} รายการ
           </div>
-          <div className="flex flex-wrap items-center gap-1 px-1">
-            {[1, "...", 4, 5, 6, "...", 20].map((num, i) => (
+          <div className="flex flex-wrap items-center gap-1">
+            {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => i + 1).map((num) => (
               <button
-                key={i}
-                disabled={num === "..."}
-                onClick={() => typeof num === "number" && setCurrentPage(num)}
+                key={num}
+                onClick={() => setCurrentPage(num)}
                 className={`w-8 h-8 rounded border text-sm flex items-center justify-center transition ${
                   num === currentPage
                     ? "bg-black text-white border-black"
-                    : num === "..."
-                    ? "text-gray-400 cursor-default border-transparent"
                     : "hover:bg-gray-200 border border-gray-300"
                 }`}
               >
