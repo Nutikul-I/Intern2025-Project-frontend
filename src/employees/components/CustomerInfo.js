@@ -94,100 +94,107 @@ export default function CustomerInfo() {
 
   /* ---------- UI ---------- */
   return (
-  <>
-     <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
-    <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
-        <h1 className="text-lg sm:text-xl font-semibold">ลูกค้า</h1>
-        <button
-          onClick={openAdd}
-          className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
-        >
-          <FaPlus />
-          <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
-        </button>
+    <>
+      <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
+        <div className="bg-gray-50 shadow-sm rounded-lg overflow-hidden">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
+            <h1 className="text-lg sm:text-xl font-semibold">ลูกค้า</h1>
+            <button
+              onClick={openAdd}
+              className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
+            >
+              <FaPlus />
+              <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
+            </button>
+          </div>
+
+          {/* Table */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-xs sm:text-sm">
+              <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+                <tr>
+                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">
+                    รหัส
+                  </th>
+                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                    ชื่อ - นามสกุล
+                  </th>
+                  {/* ซ่อนคอลัมน์อีเมลบนจอเล็ก */}
+                  <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">
+                    อีเมล
+                  </th>
+                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                    เบอร์โทรศัพท์
+                  </th>
+                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">
+                    จัดการ
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {customers.map((c) => (
+                  <tr key={c.id} className="border-t">
+                    <td className="px-2 sm:px-4 py-1 sm:py-3">{c.code}</td>
+                    <td className="px-2 sm:px-4 py-1 sm:py-3">{c.fullName}</td>
+                    <td className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3">
+                      {c.email}
+                    </td>
+                    <td className="px-2 sm:px-4 py-1 sm:py-3">{c.phone}</td>
+                    <td className="px-2 sm:px-4 py-1 sm:py-3">
+                      <div className="flex items-center justify-center gap-2 text-base">
+                        <FaHome
+                          className="cursor-pointer text-emerald-600"
+                          onClick={() => openAddressModal(c)}
+                        />
+                        <FaPencilAlt
+                          className="cursor-pointer text-yellow-500"
+                          onClick={() => openEdit(c)}
+                        />
+                        <FaTrash
+                          className="cursor-pointer text-red-500"
+                          onClick={() => handleDelete(c)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex flex-wrap justify-center sm:justify-end mt-4 gap-2 text-xs sm:text-sm">
+          <FaAngleLeft className="cursor-pointer" />
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              className={`px-2 py-1 rounded ${
+                n === 3 ? "bg-gray-900 text-white" : "hover:bg-gray-100"
+              }`}
+            >
+              {n}
+            </button>
+          ))}
+          <FaAngleRight className="cursor-pointer" />
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full text-xs sm:text-sm">
-          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
-            <tr>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">รหัส</th>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">ชื่อ - นามสกุล</th>
-              {/* ซ่อนคอลัมน์อีเมลบนจอเล็ก */}
-              <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">
-                อีเมล
-              </th>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">เบอร์โทรศัพท์</th>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">จัดการ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((c) => (
-              <tr key={c.id} className="border-t">
-                <td className="px-2 sm:px-4 py-1 sm:py-3">{c.code}</td>
-                <td className="px-2 sm:px-4 py-1 sm:py-3">{c.fullName}</td>
-                <td className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3">
-                  {c.email}
-                </td>
-                <td className="px-2 sm:px-4 py-1 sm:py-3">{c.phone}</td>
-                <td className="px-2 sm:px-4 py-1 sm:py-3">
-                  <div className="flex items-center justify-center gap-2 text-base">
-                    <FaHome
-                      className="cursor-pointer text-emerald-600"
-                      onClick={() => openAddressModal(c)}
-                    />
-                    <FaPencilAlt
-                      className="cursor-pointer text-yellow-500"
-                      onClick={() => openEdit(c)}
-                    />
-                    <FaTrash
-                      className="cursor-pointer text-red-500"
-                      onClick={() => handleDelete(c)}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      {/* ------------ Modals ------------- */}
+      <CustomerFormModal
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onSave={handleSaveCustomer}
+        editingData={editingCustomer}
+      />
 
-    {/* Pagination */}
-    <div className="flex flex-wrap justify-center sm:justify-end mt-4 gap-2 text-xs sm:text-sm">
-      <FaAngleLeft className="cursor-pointer" />
-      {[1, 2, 3, 4, 5].map((n) => (
-        <button
-          key={n}
-          className={`px-2 py-1 rounded ${
-            n === 3 ? "bg-gray-900 text-white" : "hover:bg-gray-100"
-          }`}
-        >
-          {n}
-        </button>
-      ))}
-      <FaAngleRight className="cursor-pointer" />
-    </div>
-  </div>
-
-
-    {/* ------------ Modals ------------- */}
-    <CustomerFormModal
-      open={showForm}
-      onClose={() => setShowForm(false)}
-      onSave={handleSaveCustomer}
-      editingData={editingCustomer}
-    />
-
-    <AddressModal
-      open={showAddress}
-      onClose={() => setShowAddress(false)}
-      customer={addressCustomer ?? {}}
-      onSave={handleSaveAddresses}
-    />
-  </>
+      <AddressModal
+        open={showAddress}
+        onClose={() => setShowAddress(false)}
+        customer={addressCustomer ?? {}}
+        onSave={handleSaveAddresses}
+      />
+    </>
   );
 }
