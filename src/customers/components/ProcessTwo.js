@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-//import { ArrowRight, ArrowLeft, Truck, Home, CreditCard } from "lucide-react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ProcessBar from "./ProcessBar";
 
@@ -22,9 +20,7 @@ export default function ProcessTwo() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">
-     
-
-      <main main className="w-full max-w-4xl px-6 py-16 flex-1">
+      <main className="w-full max-w-4xl px-6 py-16 flex-1">
         <h2 className="text-2xl font-semibold mb-10">การขนส่ง</h2>
 
         {loading ? (
@@ -43,20 +39,16 @@ export default function ProcessTwo() {
           </ul>
         )}
       </main>
-
-
     </div>
   );
 }
 
 function ShippingCard({ option, checked, onSelect }) {
   return (
-    <motion.label
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-      className={`w-full flex items-center justify-between gap-8            
-                rounded-xl border px-8 py-6 cursor-pointer
+    <label
+      className={`w-full flex items-center justify-between gap-8
+                  rounded-xl border px-8 py-6 cursor-pointer
+                  transition-all duration-300 ease-in-out
                   ${checked ? "border-gray-300 bg-gray-50" : "border-gray-200 hover:bg-gray-50"}`}
     >
       <div className="flex items-center gap-5 flex-1">
@@ -67,8 +59,6 @@ function ShippingCard({ option, checked, onSelect }) {
       </div>
       <span className="text-base text-gray-600">{option.eta}</span>
       <input type="radio" className="sr-only" checked={checked} onChange={onSelect} />
-    </motion.label>
+    </label>
   );
 }
-
-
