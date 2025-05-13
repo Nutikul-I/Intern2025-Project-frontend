@@ -17,32 +17,16 @@ import AddressModal from "./CustomerAddressModal.js";
 
 export default function CustomerInfo() {
   /* ---------- mock data ---------- */
-  const [customers, setCustomers] = useState([
-    {
-      id: 1,
-      code: "0000001",
-      fullName: "นายทดสอบ นามสกุลสมบูรณ์",
-      email: "test@example.com",
-      phone: "0999999999",
-      addresses: [],
-    },
-    {
-      id: 2,
-      code: "0000002",
-      fullName: "Jane Doe",
-      email: "jane@example.com",
-      phone: "0898888888",
-      addresses: [],
-    },
-    {
-      id: 3,
-      code: "0000003",
-      fullName: "John Smith",
-      email: "john@example.com",
-      phone: "0897777777",
-      addresses: [],
-    },
-  ]);
+  const [customers, setCustomers] = useState(
+  Array.from({ length: 53 }).map((_, i) => ({
+    id: i + 1,
+    code: String(i + 1).padStart(7, "0"),        // 0000001, 0000002, ...
+    fullName: `ลูกค้าทดสอบ #${i + 1}`,
+    email: `customer${i + 1}@example.com`,
+    phone: `08${String(i + 1).padStart(8, "0")}`, // 0800000001, 0800000002, ...
+    addresses: [],
+  }))
+);
 
   /* ---------- modal states ---------- */
   const [showForm, setShowForm] = useState(false);
@@ -92,11 +76,42 @@ export default function CustomerInfo() {
       prev.map((c) => (c.id === addressCustomer.id ? { ...c, addresses } : c))
     );
 
+  /* ---------- Pagination states ---------- */
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // ปรับได้
+  const totalItems = customers.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentCustomers = customers.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const displayStart = totalItems === 0 ? 0 : startIndex + 1;
+  const displayEnd = Math.min(startIndex + itemsPerPage, totalItems);
+
+  /* ดึงเลขหน้าพร้อม … */
+  const getPageNumbers = () => {
+    if (totalPages <= 7) return [...Array(totalPages).keys()].map((i) => i + 1);
+
+    const pages = [1];
+    if (currentPage > 4) pages.push("…");
+
+    const s = Math.max(2, currentPage - 1);
+    const e = Math.min(totalPages - 1, currentPage + 1);
+    for (let i = s; i <= e; i++) pages.push(i);
+
+    if (currentPage < totalPages - 3) pages.push("…");
+    pages.push(totalPages);
+    return pages;
+  };
+
   /* ---------- UI ---------- */
   return (
     <>
       <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
-        <div className="bg-gray-50 shadow-sm rounded-lg overflow-hidden">
+        <div className="bg-white shadow-sm rounded-lg overflow-hidden">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
             <h1 className="text-lg sm:text-xl font-semibold">ลูกค้า</h1>
@@ -133,7 +148,7 @@ export default function CustomerInfo() {
                 </tr>
               </thead>
               <tbody>
-                {customers.map((c) => (
+                {currentCustomers.map((c) => (
                   <tr key={c.id} className="border-t">
                     <td className="px-2 sm:px-4 py-1 sm:py-3">{c.code}</td>
                     <td className="px-2 sm:px-4 py-1 sm:py-3">{c.fullName}</td>
@@ -164,20 +179,66 @@ export default function CustomerInfo() {
           </div>
         </div>
 
-        {/* Pagination */}
-        <div className="flex flex-wrap justify-center sm:justify-end mt-4 gap-2 text-xs sm:text-sm">
-          <FaAngleLeft className="cursor-pointer" />
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              className={`px-2 py-1 rounded ${
-                n === 3 ? "bg-gray-900 text-white" : "hover:bg-gray-100"
-              }`}
-            >
-              {n}
-            </button>
-          ))}
-          <FaAngleRight className="cursor-pointer" />
+        {/* ---------- Summary + Pagination ---------- */}
+        <div className="flex flex-wrap items-center justify-center sm:justify-between mt-4 gap-3 text-xs sm:text-sm">
+          {/* ข้อความซ้ายมือ */}
+          <span className="text-gray-700">
+            แสดง {displayStart}-{displayEnd} จากทั้งหมด {totalItems} รายการ
+          </span>
+
+          {/* ปุ่มหน้า */}
+          <nav>
+            <ul className="flex overflow-hidden rounded-full border border-gray-300 divide-x divide-gray-300">
+              {/* Prev */}
+              <li>
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 flex items-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  <FaAngleLeft size={12} />
+                </button>
+              </li>
+
+              {/* หมายเลขหน้า + … */}
+              {getPageNumbers().map((p, idx) =>
+                p === "…" ? (
+                  <li
+                    key={`dots-${idx}`}
+                    className="px-3 py-1 flex items-center"
+                  >
+                    …
+                  </li>
+                ) : (
+                  <li key={p}>
+                    <button
+                      onClick={() => setCurrentPage(p)}
+                      className={`px-3 py-1 ${
+                        p === currentPage
+                          ? "bg-gray-900 text-white"
+                          : "hover:bg-gray-50"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  </li>
+                )
+              )}
+
+              {/* Next */}
+              <li>
+                <button
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 flex items-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  <FaAngleRight size={12} />
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
 
