@@ -74,61 +74,81 @@ export default function ProductPage() {
 
   return (
     <>
-      <div className="p-6">
-        <div className="flex justify-between mb-4 items-center">
-          <h1 className="text-xl font-semibold">สินค้า</h1>
-          <button
-            onClick={openAdd}
-            className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded"
-          >
-            <FaPlus /> เพิ่มข้อมูล
-          </button>
-        </div>
+      {/* ------------------------------ main ------------------------------ */}
+      <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
+        <div className="bg-gray-50 shadow-sm rounded-lg overflow-hidden">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-2 sm:px-4 py-2 sm:py-3">
+            <h1 className="text-lg sm:text-xl font-semibold">สินค้า</h1>
+            <button
+              onClick={openAdd}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
+            >
+              <FaPlus />
+              <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
+            </button>
+          </div>
 
-        <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
-                <tr>
-                  <th className="px-4 py-3 text-left">รหัส</th>
-                  <th className="px-4 py-3 text-left">ชื่อสินค้า</th>
-                  <th className="px-4 py-3 text-left">หมวดหมู่</th>
-                  <th className="px-4 py-3 text-left">ราคา</th>
-                  <th className="px-4 py-3 text-left">จำนวนที่ขายแล้ว</th>
-                  <th className="px-4 py-3 text-left">จำนวนคงเหลือ</th>
-                  <th className="px-4 py-3 text-center w-28">จัดการ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((p) => (
-                  <tr key={p.id} className="border-t">
-                    <td className="px-4 py-3">{p.code}</td>
-                    <td className="px-4 py-3">{p.name}</td>
-                    <td className="px-4 py-3">{p.category}</td>
-                    <td className="px-4 py-3">{p.price}</td>
-                    <td className="px-4 py-3">{p.sold}</td>
-                    <td className="px-4 py-3">{p.stock}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2 justify-center text-base">
-                        <FaPencilAlt
-                          className="cursor-pointer text-yellow-500"
-                          onClick={() => openEdit(p)}
-                        />
-                        <FaTrash
-                          className="cursor-pointer text-red-500"
-                          onClick={() => handleDelete(p)}
-                        />
-                      </div>
-                    </td>
+          {/* Table */}
+          <div className="bg-white shadow-sm rounded-lg">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm whitespace-nowrap">
+                <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+                  <tr>
+                    <th className="px-4 py-3 text-left">รหัส</th>
+                    <th className="px-4 py-3 text-left">ชื่อสินค้า</th>
+                    <th className="px-4 py-3 text-left hidden md:table-cell">
+                      หมวดหมู่
+                    </th>
+                    <th className="px-4 py-3 text-left">ราคา</th>
+                    <th className="px-4 py-3 text-left hidden lg:table-cell">
+                      ขายแล้ว
+                    </th>
+                    <th className="px-4 py-3 text-left hidden lg:table-cell">
+                      คงเหลือ
+                    </th>
+                    <th className="px-4 py-3 text-center w-24">จัดการ</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {products.map((p) => (
+                    <tr key={p.id} className="border-t">
+                      <td className="px-4 py-3">{p.code}</td>
+                      <td className="px-4 py-3 max-w-[10rem] truncate">
+                        {p.name}
+                      </td>
+                      <td className="px-4 py-3 hidden md:table-cell">
+                        {p.category}
+                      </td>
+                      <td className="px-4 py-3">{p.price}</td>
+                      <td className="px-4 py-3 hidden lg:table-cell">
+                        {p.sold}
+                      </td>
+                      <td className="px-4 py-3 hidden lg:table-cell">
+                        {p.stock}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-2 justify-center text-base">
+                          <FaPencilAlt
+                            className="cursor-pointer text-yellow-500"
+                            onClick={() => openEdit(p)}
+                          />
+                          <FaTrash
+                            className="cursor-pointer text-red-500"
+                            onClick={() => handleDelete(p)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Modal for Add/Edit Product */}
+      {/* ----------------------------- modal ----------------------------- */}
       <ProductFormModal
         open={showForm}
         onClose={() => setShowForm(false)}
