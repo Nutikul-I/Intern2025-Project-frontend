@@ -32,7 +32,6 @@ export default function AddProduct() {
     });
 
     const [editingProduct, setEditingProduct] = useState(null);
-//not used
     const openAdd = () => {
         setEditingProduct(null);
         setFormData({
