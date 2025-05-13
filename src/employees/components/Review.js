@@ -1,1 +1,144 @@
-//review
+// Review.js
+import { useState, useEffect } from "react";
+import { Eye } from "lucide-react";
+import ReviewModal from "./ReviewModal";
+
+
+export default function ReviewPage() {
+  const [reviews, setReviews] = useState([]);
+  const [currentPage, setCurrentPage] = useState(6);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedReview, setSelectedReview] = useState(null);
+
+  const itemsPerPage = 10;
+  const totalItems = 85;
+
+  useEffect(() => {
+    // mock data
+    setReviews([
+      {
+        id: "0000001",
+        productName: "Apple iPhone 14 Pro Max",
+        productImage: "/iphone14.jpg",
+        price: "฿1399",
+        originalPrice: "฿1499",
+        description:
+          "Just as a book is judged by its cover, the first thing you notice when you pick up a modern smartphone is the display...",
+        userName: "Darcy King",
+        userAvatar: "/avatar.jpg",
+        rating: 4,
+        date: "24 January, 2023",
+        message:
+          "I might be the only one to say this but the camera is a little funky. Hoping it will change with a software update: otherwise, love this phone! Came in great condition",
+        images: ["/review1.jpg", "/review2.jpg"],
+      },
+    ]);
+  }, [currentPage]);
+
+  const renderStars = (count) => (
+    <div className="flex gap-0.5 sm:gap-1 text-orange-400 text-[10px] sm:text-base">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span key={i}>{i <= count ? "★" : "☆"}</span>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-100 px-4 py-6 flex justify-center overflow-hidden">
+      <div className="w-full max-w-6xl">
+        {/* Header */}
+        <div className="bg-white rounded-t-xl shadow-sm p-4">
+          <h2 className="text-base sm:text-lg font-bold">รีวิว</h2>
+        </div>
+
+        {/* Table */}
+        <div className="bg-white rounded-b-xl  shadow-sm">
+          <table className="w-full text-sm text-center table-fixed">
+            <colgroup>
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '20%' }} />
+              <col style={{ width: '15%' }} />
+              <col style={{ width: '40%' }} />
+              <col style={{ width: '15%' }} />
+            </colgroup>
+            <thead className="text-gray-600 border-b bg-white text-center sm:text-center  ">
+                <tr>
+                    <th className="px-4 py-3 sm:text-center">รหัส</th>
+                    <th className="px-4 py-3 sm:text-center">ชื่อสินค้า</th>
+                    <th className="px-4 py-3 sm:text-center">เรต</th>
+                    <th className="px-4 py-3 hidden sm:table-cell">ข้อความ</th> {/* ซ่อนข้อความในหัวตารางบนมือถือ */}
+                    <th className="px-4 py-3 sm:text-center">รายละเอียด</th>
+                </tr>
+            </thead>
+            <tbody>
+                {reviews.map((rev) => (
+                    <tr key={rev.id} className="hover:bg-gray-50 border-b items-center">
+                    <td className="px-4 py-3 truncate">{rev.id}</td>
+                    <td className="px-4 py-3 truncate">{rev.productName}</td>
+                    <td className="px-4 py-3 ">{renderStars(rev.rating)}</td>
+
+                    {/* ✅ สำหรับจอใหญ่ */}
+                    <td className="px-3 py-3 text-xs hidden sm:table-cell leading-tight line-clamp-2 truncate break-words max-w-[250px]">
+                        {rev.message+"..."}
+                    </td>
+
+                    {/* ✅ สำหรับจอมือถือ (ใต้ปุ่ม) */}
+                    <td className="px-4 py-3 text-right align-top ">
+                        <div className="flex flex-col items-center ">
+                        <button
+                            onClick={() => {
+                            setSelectedReview(rev);
+                            setModalOpen(true);
+                            }}
+                            className="text-gray-600 hover:text-black"
+                        >
+                            <Eye size={18} />
+                        </button>
+
+
+                        </div>
+                    </td>
+                    </tr>
+                ))}
+                </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="text-xs sm:text-sm text-gray-600 flex flex-col md:flex-row justify-between md:items-center items-start gap-3 mt-6">
+            <div>
+                แสดง {(currentPage - 1) * itemsPerPage + 1} -{" "}
+                {Math.min(currentPage * itemsPerPage, totalItems)} จากทั้งหมด {totalItems} รายการ
+            </div>
+            <div className="flex flex-wrap items-center gap-0.5 sm:gap-1 ml-auto">
+                {[1, "...", 4, 5, 6, 7, 8, "...", 20].map((num, i) => (
+                <button
+                    key={i}
+                    disabled={num === "..."}
+                    onClick={() => typeof num === "number" && setCurrentPage(num)}
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded border text-xs sm:text-sm flex items-center justify-center transition ${
+                    num === currentPage
+                        ? "bg-black text-white border-black"
+                        : num === "..."
+                        ? "text-gray-400 cursor-default border-transparent"
+                        : "hover:bg-gray-200 border border-gray-300"
+                    }`}
+                >
+                    {num}
+                </button>
+                ))}
+            </div>
+            </div>
+
+
+
+        {/* Review Modal */}
+        <ReviewModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          review={selectedReview}
+        />
+      </div>
+    </div>
+  );
+}

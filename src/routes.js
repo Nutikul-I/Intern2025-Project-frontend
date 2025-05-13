@@ -27,8 +27,9 @@ import Product from "./employees/components/Product";
 import OrderHistoryDetail from "./customers/components/OrderHistoryDetail";
 import AddProduct from "./employees/components/AddProduct";
 import OrderList from "./employees/components/OrderList";
-
 import EditStock from "./employees/components/EditStock";
+import Review from "./employees/components/Review";
+
 
 const AppRoutes = () => (
   <Routes>
@@ -65,6 +66,10 @@ const AppRoutes = () => (
       <Route path="/employee/addproduct" element={<AddProduct />} />
       <Route path="/employee/orderlist" element={<OrderList />} />
       <Route path="/employee/editstock" element={<EditStock />} />
+
+      <Route path="/employee/review" element={<Review />} />
+
+
     </Route>
   </Routes>
 );
