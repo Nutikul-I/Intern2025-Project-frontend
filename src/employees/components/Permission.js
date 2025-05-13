@@ -2,27 +2,37 @@ import { useEffect, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import PermissionModal from "../components/PermissionModal";
 
+// จำลอง total 85 รายการ
+const mockAllRoles = Array.from({ length: 85 }).map((_, i) => ({
+  id: String(i + 1).padStart(7, "0"),
+  name: `สิทธิ์ที่ ${i + 1}`,
+  description: `รายละเอียดของสิทธิ์ ${i + 1}`,
+  permissions: {
+    ลูกค้า: { ดู: true },
+    พนักงาน: { ดู: i % 2 === 0 },
+  },
+}));
+
 export default function UserRolePage() {
   const [roles, setRoles] = useState([]);
-  const [currentPage, setCurrentPage] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
 
   const itemsPerPage = 10;
-  const totalItems = 85;
+  const totalItems = mockAllRoles.length;
+
+  // ฟังก์ชันจำลองการดึงข้อมูล
+  const fetchRoles = async (page) => {
+    // เรียกใช้ API ได้ที่นี่ในอนาคต
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = mockAllRoles.slice(startIndex, endIndex);
+    setRoles(pageData);
+  };
 
   useEffect(() => {
-    setRoles([
-      {
-        id: "0000001",
-        name: "ผู้จัดการ",
-        description: "ลูกค้า, พนักงาน, สิทธิ์ผู้ใช้งาน, สินค้า, นำเข้าสินค้า",
-        permissions: {
-          ลูกค้า: { ดู: true },
-          พนักงาน: { ดู: true },
-        },
-      },
-    ]);
+    fetchRoles(currentPage);
   }, [currentPage]);
 
   const handleSaveRole = (newRole) => {
@@ -48,7 +58,7 @@ export default function UserRolePage() {
     <div className="min-h-screen bg-gray-100 px-4 sm:px-6 py-8 flex justify-center">
       <div className="w-full max-w-6xl">
 
-        {/* Header (ไม่มี margin-bottom แล้ว) */}
+        {/* Header */}
         <div className="bg-white rounded-t-xl shadow-sm p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-lg font-semibold text-gray-800">สิทธิ์ผู้ใช้งาน</h2>
           <button
@@ -62,7 +72,7 @@ export default function UserRolePage() {
           </button>
         </div>
 
-        {/* Table (ชิดติดกับ header และใช้ rounded-b) */}
+        {/* Table */}
         <div className="overflow-x-auto w-full bg-white rounded-b-xl shadow-sm">
           <table className="w-full text-xs sm:text-sm text-left">
             <thead className="text-gray-600 border-b bg-white">
@@ -104,17 +114,14 @@ export default function UserRolePage() {
             แสดง {(currentPage - 1) * itemsPerPage + 1} -{" "}
             {Math.min(currentPage * itemsPerPage, totalItems)} จากทั้งหมด {totalItems} รายการ
           </div>
-          <div className="flex flex-wrap items-center gap-1 px-1">
-            {[1, "...", 4, 5, 6, "...", 20].map((num, i) => (
+          <div className="flex flex-wrap items-center gap-1 px-1 justify-end w-full md:w-auto">
+            {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => i + 1).map((num) => (
               <button
-                key={i}
-                disabled={num === "..."}
-                onClick={() => typeof num === "number" && setCurrentPage(num)}
+                key={num}
+                onClick={() => setCurrentPage(num)}
                 className={`w-8 h-8 rounded border text-sm flex items-center justify-center transition ${
                   num === currentPage
                     ? "bg-black text-white border-black"
-                    : num === "..."
-                    ? "text-gray-400 cursor-default border-transparent"
                     : "hover:bg-gray-200 border border-gray-300"
                 }`}
               >
