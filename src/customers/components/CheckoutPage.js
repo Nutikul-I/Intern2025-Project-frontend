@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import ProcessOne from "./ProcessOne";
 import ProcessBar from "./ProcessBar";
 import ProcessTwo from "./ProcessTwo";
+import ProcessThree from "./ProcessThree";
 
 const CheckoutPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState({
+        item:[],
         address: null,
         shipping: null,
         payment: null,
@@ -13,58 +15,44 @@ const CheckoutPage = () => {
 
     const updateStepData = (stepKey, data) => {
         setFormData(prev => ({ ...prev, [stepKey]: data }));
-        setCurrentStep(prev => prev + 1);
+        if (currentStep < 3) {
+            setCurrentStep(prev => prev + 1);
+        }
+    };
+
+    const handleSave = () => {
+        console.log("All data saved:", formData);
     };
 
     return (
-        <div>
+        <div className="px-4 py-6">
             <ProcessBar currentStep={currentStep} />
 
             {currentStep === 1 && (
                 <ProcessOne
-                    data={formData.address}
+                    data={formData}
                     onNext={(data) => updateStepData("address", data)}
                 />
             )}
+
             {currentStep === 2 && (
-                  <ProcessTwo
-                    data={formData.shipping}
+                <ProcessTwo
+                    data={formData}
                     onNext={(data) => updateStepData("shipping", data)}
                     onBack={() => setCurrentStep(1)}
-                  />
-                // <div className="flex justify-center items-center h-screen">
-                //     <h1 className="text-2xl font-bold">Shipping Method</h1>
-                //     <p className="mt-4">Choose your shipping method here.</p>
-                // </div>
+                />
             )}
-            {currentStep === 3 && (
-                //   <ProcessTwo
-                //     data={formData.payment}
-                //     onSubmit={(data) => updateStepData("payment", data)}
-                //     onBack={() => setCurrentStep(2)}
-                //   />
-                <div className="flex justify-center items-center h-screen">
-                    <h1 className="text-2xl font-bold">Payment Method</h1>
-                    <p className="mt-4">Choose your payment method here.</p>
-                </div>
-            )}
-            <div className="flex justify-end items-center mt-6 space-x-4 px-4 mr-10">
-                <button
-                    className="w-32 h-12 bg-white text-gray-800 border border-black rounded text-lg"
-                    onClick={() => setCurrentStep(currentStep - 1)}
-                    disabled={currentStep === 1}
-                >
-                    ย้อนกลับ
-                </button>
-                <button
-                    className="w-32 h-12 bg-black text-white rounded text-lg"
-                    onClick={() => setCurrentStep(currentStep + 1)}
-                    disabled={currentStep === 3}
-                >
-                    ถัดไป
-                </button>
-            </div>
 
+            {currentStep === 3 && (
+                <ProcessThree
+                    data={formData}
+                    onNext={(data) => {
+                        updateStepData("payment", data);
+                        handleSave();
+                    }}
+                    onBack={() => setCurrentStep(2)}
+                />
+            )}
         </div>
     );
 };

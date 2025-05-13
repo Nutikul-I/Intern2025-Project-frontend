@@ -60,18 +60,18 @@ const Sidebar = ({ currentPath }) => {
 
                     <MenuItem
                         active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/product")} />}
+                        component={<Link to="/employee/product" />}
+                        className={itemClass(currentPath === "/employee/product")}
                     >
                         สินค้า
                     </MenuItem>
 
                     <MenuItem
-                        active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        active={currentPath === "/employee/orderlist"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/orderlist")} />}
+                        component={<Link to="/employee/orderlist" />}
+                        className={itemClass(currentPath === "/employee/orderlist")}
                     >
                         รายการสั่งซื้อ
                     </MenuItem>
@@ -112,6 +112,15 @@ const Sidebar = ({ currentPath }) => {
                         className={itemClass(currentPath === "/employee/category")}
                     >
                         หมวดหมู่
+                    </MenuItem>
+
+                    <MenuItem
+                        active={currentPath === "/employee/discount"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/discount")} />}
+                        component={<Link to="/employee/discount" />}
+                        className={itemClass(currentPath === "/employee/discount")}
+                    >
+                        ส่วนลด
                     </MenuItem>
                     
                     <MenuItem

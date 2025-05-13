@@ -2,9 +2,9 @@ import { useNavigate } from "react-router-dom";
 
 
 /* ================ MAIN ================ */
-export default function ProcessThree() {
+export default function ProcessThree({data, onNext, onBack}) {
   const navigate = useNavigate();
-
+  console.log("ProcessThree data", data);
   const order = {
     items: [
       {
@@ -22,20 +22,19 @@ export default function ProcessThree() {
       },
     ],
     address: "1131 Dusty Townline, Jacksonville, TX 40322",
-    shipping: "ฟรี",
+    shipping: data.shipping.label,
     subtotal: 2347,
     discount: 850,
     fee: 80,
   };
+
   const total = order.subtotal - order.discount + order.fee;
 
-  /* -------- confirm -------- */
-  const handleConfirm = (e) => {
-    e.preventDefault();
-    // TODO: payment API
-    alert("ชำระเงินสำเร็จ!");
-    navigate("/");
+  const handleConfirm = () => {
+    const paymentData = { status: "paid" };
+    onNext(paymentData);
   };
+
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">
@@ -74,27 +73,27 @@ export default function ProcessThree() {
             <dd className="mb-3 text-base font-semibold ">{order.address}</dd>
 
             <div className="text-sm space-y-6 mb-6">
-            <dt className="font-medium">การจัดส่ง</dt>
-             <dd>฿{order.shipping}</dd>
-  </div>
+              <dt className="font-medium">การจัดส่ง</dt>
+              <dd>฿{order.shipping}</dd>
+            </div>
 
 
-        {/* ราคาสินค้า */}
-        <div className="flex justify-between">
-            <dt className="font-medium text-base font-semibold  ">ราคาสินค้า</dt>
-            <dd className="text-base font-semibold ">฿{order.subtotal}</dd>
-        </div>
+            {/* ราคาสินค้า */}
+            <div className="flex justify-between">
+              <dt className="font-medium text-base font-semibold  ">ราคาสินค้า</dt>
+              <dd className="text-base font-semibold ">฿{order.subtotal}</dd>
+            </div>
 
-        {/* ส่วนลด */}
-        <div className="flex justify-between">
-            <dt className="font-medium">ส่วนลด</dt>
-            <dd className="text-base font-semibold ">฿{order.discount}</dd>
-        </div>
+            {/* ส่วนลด */}
+            <div className="flex justify-between">
+              <dt className="font-medium">ส่วนลด</dt>
+              <dd className="text-base font-semibold ">฿{order.discount}</dd>
+            </div>
 
-        {/* ค่าจัดส่ง */}
-        <div className="flex justify-between">
-            <dt className="font-medium">ค่าจัดส่ง</dt>
-            <dd className="text-base font-semibold ">฿{order.fee}</dd>
+            {/* ค่าจัดส่ง */}
+            <div className="flex justify-between">
+              <dt className="font-medium">ค่าจัดส่ง</dt>
+              <dd className="text-base font-semibold ">฿{order.fee}</dd>
             </div>
           </dl>
 
@@ -129,17 +128,30 @@ export default function ProcessThree() {
           </div>
 
           {/* form */}
-          <form onSubmit={handleConfirm} className="space-y-4 ">
-          <input required placeholder="ชื่อผู้ถือบัตร" className="input" />
-         <input required placeholder="เลขบัตร"        className="input" maxLength={19} />
+          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <input required placeholder="ชื่อผู้ถือบัตร" className="input" />
+            <input required placeholder="เลขบัตร" className="input" maxLength={19} />
             <div className="flex gap-4">
-                <input required placeholder="วันหมดอายุ" className="input flex-1" />
-                <input required placeholder="CVV"        className="input flex-1" maxLength={4} />
+              <input required placeholder="วันหมดอายุ" className="input flex-1" />
+              <input required placeholder="CVV" className="input flex-1" maxLength={4} />
             </div>
-
-            
-           
           </form>
+          <div className="mt-10 flex justify-end">
+            <button
+              onClick={onBack}
+              className="text-gray-700 hover:text-gray-700 mr-4 border border-gray-700 rounded px-4 py-2"
+            >
+              ย้อนกลับ
+            </button>
+
+            <button
+              type="submit"
+              onClick={handleConfirm}
+              className="bg-black text-white rounded-lg py-2 px-4 hover:opacity-90"
+            >
+              ยืนยันการชำระเงิน
+            </button>
+          </div>
         </section>
       </main>
     </div>

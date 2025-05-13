@@ -15,6 +15,9 @@ export default function CategoryList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState('');
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editingDiscount, setEditingDiscount] = useState(null); // null หรือ object
+
     const totalPages = Math.ceil(mockCategories.length / itemsPerPage);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -25,12 +28,11 @@ export default function CategoryList() {
     };
 
     const handleSave = () => {
-        setIsModalOpen(false);
-        setNewCategoryName('');
+        handleCloseModal();
 
         Swal.fire({
             icon: 'success',
-            title: 'บันทึกข้อมูลสำเร็จ',
+            title: isEditMode ? 'อัปเดตข้อมูลสำเร็จ' : 'บันทึกข้อมูลสำเร็จ',
             confirmButtonText: 'ตกลง',
             customClass: {
                 confirmButton: 'bg-black text-white px-6 py-2 rounded-full',
@@ -38,6 +40,12 @@ export default function CategoryList() {
             buttonsStyling: false,
         });
     };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setNewCategoryName('');
+        setIsEditMode(false);
+    }
 
     return (
         <div className="p-6 bg-white rounded-xl shadow">
@@ -65,7 +73,14 @@ export default function CategoryList() {
                             <td className="py-2">{cat.id}</td>
                             <td className="py-2">{cat.name}</td>
                             <td className="py-2">
-                                <button className="text-yellow-500 mr-2 hover:opacity-80">
+                                <button
+                                    className="text-yellow-500 mr-2 hover:opacity-80"
+                                    onClick={() => {
+                                        setIsEditMode(true);
+                                        setNewCategoryName(cat.name);
+                                        setIsModalOpen(true);
+                                    }}
+                                >
                                     <FiEdit />
                                 </button>
                                 <button className="text-red-500 hover:opacity-80">
@@ -93,7 +108,7 @@ export default function CategoryList() {
 
             {/* Modal */}
             <Transition appear show={isModalOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-50" onClose={() => setIsModalOpen(false)}>
+                <Dialog as="div" className="relative z-50" onClose={() => handleCloseModal()}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -107,7 +122,7 @@ export default function CategoryList() {
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto flex items-center justify-center">
-                        <div className="w-full max-w-md p-4">
+                        <div className="w-full max-w-xl p-4">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -119,12 +134,12 @@ export default function CategoryList() {
                             >
                                 <Dialog.Panel className="bg-white p-6 rounded-xl relative shadow-xl transition-all">
                                     <button
-                                        onClick={() => setIsModalOpen(false)}
+                                        onClick={() => handleCloseModal()}
                                         className="absolute top-3 right-4 text-xl text-gray-600 hover:text-black"
                                     >
                                         &times;
                                     </button>
-                                    <Dialog.Title className="text-lg font-bold mb-4">เพิ่มหมวดหมู่</Dialog.Title>
+                                    <Dialog.Title className="text-2xl mb-6">หมวดหมู่</Dialog.Title>
                                     <div className="flex items-center gap-4 mb-6">
                                         <label className="whitespace-nowrap font-medium">ชื่อหมวดหมู่</label>
                                         <input
@@ -138,7 +153,7 @@ export default function CategoryList() {
                                     </div>
                                     <div className="flex justify-end gap-2">
                                         <button
-                                            onClick={() => setIsModalOpen(false)}
+                                            onClick={() => handleCloseModal()}
                                             className="px-4 py-2 border rounded-lg"
                                         >
                                             ยกเลิก

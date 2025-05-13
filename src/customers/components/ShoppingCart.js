@@ -136,6 +136,7 @@ const ShoppingCart = () => {
         <button className="w-full bg-black text-white py-2 rounded text-sm sm:text-base">
           ยืนยันคำสั่งซื้อ
         </button>
+        {/* ส่งข้อมูลของใน order ไปยัง item ใน CheckOutPage.js */}
       </div>
 
     </div>
