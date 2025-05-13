@@ -94,6 +94,15 @@ const Sidebar = ({ currentPath }) => {
                         ปรับสต๊อก
                     </MenuItem>
 
+                    <MenuItem
+                        active={currentPath === "/employee/review"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/review")} />}
+                        component={<Link to="/employee/review" />}
+                        className={itemClass(currentPath === "/employee/review")}
+                    >
+                        รีวิว
+                    </MenuItem>
+
                     {/* system section*/}
                     <div className={sectionTitleClass}>ตั้งค่าระบบ</div>
                     <MenuItem

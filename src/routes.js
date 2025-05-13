@@ -19,6 +19,7 @@ import LayoutEmployee from "./employees/pages/Layout";
 import DashBoard from "./employees/components/Dashboard";
 import Employees from "./employees/components/Employee";
 import Permission from "./employees/components/Permission";
+import Review from "./employees/components/Review";
 
 const AppRoutes = () => (
   <Routes>
@@ -45,7 +46,7 @@ const AppRoutes = () => (
       <Route path="/employee/dashboard" element={<DashBoard />} />
       <Route path="/employee/employee" element={<Employees />} />
       <Route path="/employee/permission" element={<Permission />} />
-      
+      <Route path="/employee/review" element={<Review />} />
 
     </Route>
   </Routes>
