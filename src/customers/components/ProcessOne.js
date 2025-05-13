@@ -3,7 +3,7 @@ import { Pencil, X } from "lucide-react";
 import Swal from "sweetalert2";
 import { Dialog } from "@headlessui/react";
 
-const ProcessOne = () => {
+const ProcessOne = ({ data, onNext, onBack }) => {
   const [address, setAddress] = useState([
     {
       id: 1,
@@ -73,19 +73,19 @@ const ProcessOne = () => {
   };
 
   const handleDelete = (id) => {
-    setAddress((prev) => prev.filter((a) => a.id !== id));
+    setAddress(prev => prev.filter((a) => a.id !== id));
   };
 
   const handleSave = () => {
     if (formData.id) {
       // Edit
-      setAddress((prev) =>
+      setAddress(prev =>
         prev.map((a) => (a.id === formData.id ? formData : a))
       );
     } else {
       // Add
       const newId = Math.max(...address.map((a) => a.id)) + 1;
-      setAddress((prev) => [...prev, { ...formData, id: newId }]);
+      setAddress(prev => [...prev, { ...formData, id: newId }]);
     }
 
     closeModal();
@@ -98,17 +98,30 @@ const ProcessOne = () => {
     });
   };
 
+  const handleNext = () => {
+    const selected = address.find(a => a.id === selectedId);
+    if (!selected) {
+      Swal.fire({
+        icon: "error",
+        title: "กรุณาเลือกที่อยู่",
+        confirmButtonText: "ตกลง",
+      });
+      return;
+    }
+
+    onNext(selected); // ส่งที่อยู่ที่เลือกกลับไปยัง CheckoutPage
+  };
+
   return (
-    <div className="flex flex-col items-center mt-6">
+    <div className="flex flex-col  mt-6 items-center">
       <h1 className="text-xl font-bold mb-6 text-gray-900">เลือกที่อยู่</h1>
 
       <div className="flex flex-col w-full max-w-2xl space-y-4">
         {address.map((item) => (
           <label
             key={item.id}
-            className={`flex justify-between items-start p-5 rounded-lg bg-gray-100 cursor-pointer transition-colors ${
-              selectedId === item.id ? "ring-2 ring-black" : ""
-            }`}
+            className={`flex justify-between items-start p-5 rounded-lg bg-gray-100 cursor-pointer transition-colors ${selectedId === item.id ? "ring-2 ring-black" : ""
+              }`}
           >
             <div className="flex items-start gap-3 flex-1">
               <input
@@ -122,7 +135,8 @@ const ProcessOne = () => {
                 <p className="font-semibold text-base">{item.name}</p>
                 <p>{item.address}</p>
                 <p>
-                  {item.District}, {item.Province}, {item.Subdistrict} {item.Zipcode}
+                  {item.District}, {item.Province}, {item.Subdistrict}{" "}
+                  {item.Zipcode}
                 </p>
                 <p>{item.phone}</p>
               </div>
@@ -149,6 +163,26 @@ const ProcessOne = () => {
             +
           </span>
           <span className="mt-1">เพิ่มที่อยู่ใหม่</span>
+        </button>
+      </div>
+
+      {/* Next Button */}
+      <div className="flex justify-end ml-auto">
+        <button
+          onClick={onBack}
+          className="text-gray-700 hover:text-gray-700 mr-4 border border-gray-700 rounded px-4 py-2"
+        >
+          ย้อนกลับ
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={!selectedId}
+          className={`${!selectedId
+            ? "bg-gray-300 cursor-not-allowed"
+            : "bg-black hover:opacity-90"
+            } text-white px-6 py-2 rounded`}
+        >
+          ถัดไป
         </button>
       </div>
 
