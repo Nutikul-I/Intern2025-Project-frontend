@@ -77,19 +77,19 @@ const Sidebar = ({ currentPath }) => {
                     </MenuItem>
                     
                     <MenuItem
-                        active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        active={currentPath === "/employee/addproduct"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/addproduct")} />}
+                        component={<Link to="/employee/addproduct" />}
+                        className={itemClass(currentPath === "/employee/addproduct")}
                     >
                         นำเข้าสินค้า
                     </MenuItem>
 
                     <MenuItem
-                        active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        active={currentPath === "/employee/editstock"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/editstock")} />}
+                        component={<Link to="/employee/editstock" />}
+                        className={itemClass(currentPath === "/employee/editstock")}
                     >
                         ปรับสต๊อก
                     </MenuItem>
@@ -133,10 +133,10 @@ const Sidebar = ({ currentPath }) => {
                     </MenuItem>
                     
                     <MenuItem
-                        active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        active={currentPath === "/employee/countingUnit"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/countingUnit")} />}
+                        component={<Link to="/employee/countingUnit" />}
+                        className={itemClass(currentPath === "/employee/countingUnit")}
                     >
                         หน่วยนับ
                     </MenuItem>
