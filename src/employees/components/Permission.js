@@ -14,6 +14,7 @@ const mockAllRoles = Array.from({ length: 85 }).map((_, i) => ({
 }));
 
 export default function UserRolePage() {
+  const [allRoles, setAllRoles] = useState([]);
   const [roles, setRoles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
@@ -31,20 +32,42 @@ export default function UserRolePage() {
     setRoles(pageData);
   };
 
+  // สร้างข้อมูลทั้งหมด 85 รายการ
   useEffect(() => {
+
     fetchRoles(currentPage);
   }, [currentPage]);
 
+    const fakeData = Array.from({ length: totalItems }, (_, index) => ({
+      id: String(index + 1).padStart(7, "0"),
+      name: `สิทธิ์ที่ ${index + 1}`,
+      description: `รายละเอียดของสิทธิ์ที่ ${index + 1}`,
+      permissions: {
+        ลูกค้า: { ดู: true },
+        พนักงาน: { ดู: true },
+      },
+    }));
+    setAllRoles(fakeData);
+  }, []);
+
+  // อัปเดตรายการตามหน้าที่เลือก
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setRoles(allRoles.slice(startIndex, endIndex));
+  }, [currentPage, allRoles]);
+
+
   const handleSaveRole = (newRole) => {
-    setRoles((prev) => {
-      if (selectedRole) {
-        return prev.map((r) =>
-          r.id === selectedRole.id ? { ...r, ...newRole } : r
-        );
-      } else {
-        return [...prev, { id: String(Date.now()), ...newRole }];
-      }
-    });
+    if (selectedRole) {
+      const updatedAllRoles = allRoles.map((r) =>
+        r.id === selectedRole.id ? { ...r, ...newRole } : r
+      );
+      setAllRoles(updatedAllRoles);
+    } else {
+      const newId = String(Date.now());
+      setAllRoles([{ id: newId, ...newRole }, ...allRoles]);
+    }
     setShowModal(false);
     setSelectedRole(null);
   };
@@ -110,11 +133,15 @@ export default function UserRolePage() {
 
         {/* Pagination */}
         <div className="text-sm text-gray-600 flex flex-col md:flex-row justify-between md:items-center items-start gap-4 mt-6">
-          <div className="px-1">
+          <div>
             แสดง {(currentPage - 1) * itemsPerPage + 1} -{" "}
             {Math.min(currentPage * itemsPerPage, totalItems)} จากทั้งหมด {totalItems} รายการ
           </div>
+
           <div className="flex flex-wrap items-center gap-1 px-1 justify-end w-full md:w-auto">
+
+          <div className="flex flex-wrap items-center gap-1">
+
             {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => i + 1).map((num) => (
               <button
                 key={num}
