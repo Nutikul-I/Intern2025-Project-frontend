@@ -68,10 +68,10 @@ const Sidebar = ({ currentPath }) => {
                     </MenuItem>
 
                     <MenuItem
-                        active={currentPath === "/employee/"}
-                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/")} />}
-                        component={<Link to="/employee/" />}
-                        className={itemClass(currentPath === "/employee/")}
+                        active={currentPath === "/employee/orderlist"}
+                        icon={<FaBriefcase className={iconClass(currentPath === "/employee/orderlist")} />}
+                        component={<Link to="/employee/orderlist" />}
+                        className={itemClass(currentPath === "/employee/orderlist")}
                     >
                         รายการสั่งซื้อ
                     </MenuItem>

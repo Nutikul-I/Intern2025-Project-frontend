@@ -25,6 +25,7 @@ import CountingUnit from "./employees/components/CountingUnit";
 import Discount from "./employees/components/Discount";
 import Product from "./employees/components/Product";
 import OrderHistoryDetail from "./customers/components/OrderHistoryDetail";
+import OrderList from "./employees/components/OrderList";
 
 const AppRoutes = () => (
   <Routes>
@@ -58,6 +59,7 @@ const AppRoutes = () => (
       <Route path="/employee/countingUnit" element={<CountingUnit />} />
       <Route path="/employee/discount" element={<Discount />} />
       <Route path="/employee/product" element={<Product />} />
+      <Route path="/employee/orderlist" element={<OrderList />} />
     
     </Route>
   </Routes>
