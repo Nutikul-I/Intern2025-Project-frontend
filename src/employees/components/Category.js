@@ -28,8 +28,7 @@ export default function CategoryList() {
     };
 
     const handleSave = () => {
-        setIsModalOpen(false);
-        setNewCategoryName('');
+        handleCloseModal();
 
         Swal.fire({
             icon: 'success',
@@ -41,6 +40,12 @@ export default function CategoryList() {
             buttonsStyling: false,
         });
     };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setNewCategoryName('');
+        setIsEditMode(false);
+    }
 
     return (
         <div className="p-6 bg-white rounded-xl shadow">
@@ -103,7 +108,7 @@ export default function CategoryList() {
 
             {/* Modal */}
             <Transition appear show={isModalOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-50" onClose={() => setIsModalOpen(false)}>
+                <Dialog as="div" className="relative z-50" onClose={() => handleCloseModal()}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -129,7 +134,7 @@ export default function CategoryList() {
                             >
                                 <Dialog.Panel className="bg-white p-6 rounded-xl relative shadow-xl transition-all">
                                     <button
-                                        onClick={() => setIsModalOpen(false)}
+                                        onClick={() => handleCloseModal()}
                                         className="absolute top-3 right-4 text-xl text-gray-600 hover:text-black"
                                     >
                                         &times;
@@ -148,7 +153,7 @@ export default function CategoryList() {
                                     </div>
                                     <div className="flex justify-end gap-2">
                                         <button
-                                            onClick={() => setIsModalOpen(false)}
+                                            onClick={() => handleCloseModal()}
                                             className="px-4 py-2 border rounded-lg"
                                         >
                                             ยกเลิก

@@ -21,7 +21,7 @@ export default function Discount() {
     const [newDiscountAmount, setNewDiscountAmount] = useState('');
     const [newDiscountQty, setNewDiscountQty] = useState('');
     const [isEditMode, setIsEditMode] = useState(false);
-    const [editingDiscount, setEditingDiscount] = useState(null); // null หรือ object
+    const [editingDiscount, setEditingDiscount] = useState(null);
 
 
     const totalPages = Math.ceil(mockDiscounts.length / itemsPerPage);
@@ -48,13 +48,7 @@ export default function Discount() {
             });
         }
 
-        // Reset modal state
-        setIsModalOpen(false);
-        setIsEditMode(false);
-        setEditingDiscount(null);
-        setNewDiscountCode('');
-        setNewDiscountAmount('');
-        setNewDiscountQty('');
+        handleCloseModal();
 
         Swal.fire({
             icon: 'success',
@@ -66,6 +60,15 @@ export default function Discount() {
             buttonsStyling: false,
         });
     };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setIsEditMode(false);
+        setEditingDiscount(null);
+        setNewDiscountCode('');
+        setNewDiscountAmount('');
+        setNewDiscountQty('');
+    }
 
     return (
         <div className="p-6 bg-white rounded-xl shadow">
@@ -135,7 +138,7 @@ export default function Discount() {
 
             {/* Modal */}
             <Transition appear show={isModalOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-50" onClose={() => setIsModalOpen(false)}>
+                <Dialog as="div" className="relative z-50" onClose={() => handleCloseModal()}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -161,7 +164,7 @@ export default function Discount() {
                             >
                                 <Dialog.Panel className="bg-white p-6 rounded-xl relative shadow-xl transition-all">
                                     <button
-                                        onClick={() => setIsModalOpen(false)}
+                                        onClick={() => handleCloseModal()}
                                         className="absolute top-3 right-4 text-xl text-gray-600 hover:text-black"
                                     >
                                         &times;
@@ -201,7 +204,7 @@ export default function Discount() {
                                     </div>
                                     <div className="flex justify-end gap-2">
                                         <button
-                                            onClick={() => setIsModalOpen(false)}
+                                            onClick={() => handleCloseModal()}
                                             className="px-4 py-2 border rounded-lg"
                                         >
                                             ยกเลิก
