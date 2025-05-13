@@ -47,6 +47,7 @@ export default function OrderList() {
   });
 
   /* ---------------- Pagination state ---------------- */
+  const totalItems = ordersWithTotal.length;
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -58,10 +59,13 @@ export default function OrderList() {
     startIndex,
     startIndex + itemsPerPage
   );
+  const displayStart = totalItems === 0 ? 0 : startIndex + 1;
+  const displayEnd = Math.min(startIndex + itemsPerPage, totalItems);
 
   /* สร้าง page numbers แบบมี … */
   const getPageNumbers = () => {
-    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (totalPages <= 7)
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const pages = [1];
     if (currentPage > 4) pages.push("…");
@@ -87,7 +91,9 @@ export default function OrderList() {
 
   const handleSaveStatus = (newStatus) => {
     setOrders((prev) =>
-      prev.map((o) => (o.id === selectedOrder.id ? { ...o, status: newStatus } : o))
+      prev.map((o) =>
+        o.id === selectedOrder.id ? { ...o, status: newStatus } : o
+      )
     );
     setShowModal(false);
   };
@@ -117,9 +123,15 @@ export default function OrderList() {
                   <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">
                     วันที่สั่งซื้อ
                   </th>
-                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">การขนส่ง</th>
-                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">ส่วนลด</th>
-                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">จำนวนเงิน</th>
+                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                    การขนส่ง
+                  </th>
+                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                    ส่วนลด
+                  </th>
+                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                    จำนวนเงิน
+                  </th>
                   <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">
                     จัดการ
                   </th>
@@ -157,8 +169,14 @@ export default function OrderList() {
           </div>
         </div>
 
+
+        <div className="flex flex-wrap justify-center sm:justify-between items-center mt-4 gap-3 text-xs sm:text-sm">
+        <span className="text-gray-700">
+          แสดง {displayStart}-{displayEnd} จากทั้งหมด {totalItems} รายการ
+        </span>
+
         {/* ---------- Pagination ---------- */}
-        <div className="flex flex-wrap justify-center sm:justify-end mt-4 gap-1 text-xs sm:text-sm">
+        <div className="flex items-center gap-1">
           {/* prev */}
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
@@ -205,6 +223,7 @@ export default function OrderList() {
             <FaAngleRight />
           </button>
         </div>
+      </div>
       </div>
 
       {/* ---------- Modal ---------- */}
