@@ -259,7 +259,7 @@ export default function Home() {
   "
         style={{
           backgroundImage:
-            "url('https://instore.studio7thailand.com/wp-content/uploads/2018/09/Studio7-iPhone-XR-Banner-13sep18.jpg')",
+            "url('https://i.postimg.cc/wTrZbj3H/942b063efe4f8cf2ecc828f4183bd3b7d2d0cac5.png')",
         }}
       >
         <div className="absolute inset-0 bg-black/50" />
