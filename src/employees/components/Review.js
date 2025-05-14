@@ -101,7 +101,7 @@ export default function ReviewPage() {
                       }}
                       className="text-gray-600 hover:text-black"
                     >
-                      <Eye size={18} />
+                      <Eye size={20} />
                     </button>
                   </td>
                 </tr>

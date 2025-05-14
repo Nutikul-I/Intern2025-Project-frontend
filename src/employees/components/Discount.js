@@ -103,9 +103,9 @@ export default function Discount() {
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.code}</td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.amount}</td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.quantity}</td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3">
+                  <td className="px-2 sm:px-4 py-1 sm:py-3 ">
                     <button
-                      className="text-yellow-500 mr-2 hover:opacity-80"
+                      className="text-yellow-500 mr-2 hover:opacity-80 text-base"
                       onClick={() => {
                         setIsEditMode(true);
                         setEditingDiscount(discount);
@@ -117,7 +117,7 @@ export default function Discount() {
                     >
                       <FaPencilAlt />
                     </button>
-                    <button className="text-red-500 hover:opacity-80">
+                    <button className="text-red-500 hover:opacity-80 text-base">
                       <FaTrash />
                     </button>
                   </td>
