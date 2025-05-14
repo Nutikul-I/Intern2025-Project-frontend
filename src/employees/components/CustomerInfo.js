@@ -119,7 +119,6 @@ export default function CustomerInfo() {
               onClick={openAdd}
               className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
             >
-              <FaPlus />
               <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
             </button>
           </div>
