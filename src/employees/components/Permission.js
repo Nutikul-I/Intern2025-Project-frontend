@@ -23,21 +23,21 @@ export default function UserRolePage() {
   const itemsPerPage = 10;
   const totalItems = mockAllRoles.length;
 
-  // ฟังก์ชันจำลองการดึงข้อมูล
+  // จำลองการโหลดข้อมูลตามหน้าปัจจุบัน
   const fetchRoles = async (page) => {
-    // เรียกใช้ API ได้ที่นี่ในอนาคต
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const pageData = mockAllRoles.slice(startIndex, endIndex);
     setRoles(pageData);
   };
 
-  // สร้างข้อมูลทั้งหมด 85 รายการ
+  // โหลดข้อมูลตาม currentPage
   useEffect(() => {
-
     fetchRoles(currentPage);
   }, [currentPage]);
 
+  // สร้างข้อมูลทั้งหมดเมื่อ component mount
+  useEffect(() => {
     const fakeData = Array.from({ length: totalItems }, (_, index) => ({
       id: String(index + 1).padStart(7, "0"),
       name: `สิทธิ์ที่ ${index + 1}`,
@@ -50,13 +50,12 @@ export default function UserRolePage() {
     setAllRoles(fakeData);
   }, []);
 
-  // อัปเดตรายการตามหน้าที่เลือก
+  // อัปเดตรายการหน้าที่เลือกเมื่อข้อมูลเปลี่ยน
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     setRoles(allRoles.slice(startIndex, endIndex));
   }, [currentPage, allRoles]);
-
 
   const handleSaveRole = (newRole) => {
     if (selectedRole) {
@@ -139,22 +138,21 @@ export default function UserRolePage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-1 px-1 justify-end w-full md:w-auto">
-
-          <div className="flex flex-wrap items-center gap-1">
-
-            {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => i + 1).map((num) => (
-              <button
-                key={num}
-                onClick={() => setCurrentPage(num)}
-                className={`w-8 h-8 rounded border text-sm flex items-center justify-center transition ${
-                  num === currentPage
-                    ? "bg-black text-white border-black"
-                    : "hover:bg-gray-200 border border-gray-300"
-                }`}
-              >
-                {num}
-              </button>
-            ))}
+            <div className="flex flex-wrap items-center gap-1">
+              {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => i + 1).map((num) => (
+                <button
+                  key={num}
+                  onClick={() => setCurrentPage(num)}
+                  className={`w-8 h-8 rounded border text-sm flex items-center justify-center transition ${
+                    num === currentPage
+                      ? "bg-black text-white border-black"
+                      : "hover:bg-gray-200 border border-gray-300"
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
