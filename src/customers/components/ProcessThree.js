@@ -128,14 +128,33 @@ export default function ProcessThree({data, onNext, onBack}) {
           </div>
 
           {/* form */}
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <input required placeholder="ชื่อผู้ถือบัตร" className="input" />
-            <input required placeholder="เลขบัตร" className="input" maxLength={19} />
-            <div className="flex gap-4">
-              <input required placeholder="วันหมดอายุ" className="input flex-1" />
-              <input required placeholder="CVV" className="input flex-1" maxLength={4} />
+          <form className="space-y-4 w-full max-w-lg" onSubmit={(e) => e.preventDefault()}>
+            <input
+              required
+              placeholder="ชื่อผู้ถือบัตร"
+              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            />
+            <input
+              required
+              placeholder="เลขบัตร"
+              maxLength={19}
+              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            />
+            <div className="flex flex-col sm:flex-row gap-4">
+              <input
+                required
+                placeholder="วันหมดอายุ"
+                className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              />
+              <input
+                required
+                placeholder="CVV"
+                maxLength={4}
+                className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              />
             </div>
           </form>
+
           <div className="mt-10 flex justify-end">
             <button
               onClick={onBack}
