@@ -172,7 +172,7 @@ export default function Navbar() {
               {/* links */}
               <ul className="space-y-2 mb-4">
                 {[
-                  { name: "หน้าหลัก", to: "/" },
+                  { name: "หน้าหลัก", to: "/home" },
                   { name: "เกี่ยวกับเรา", to: "/about" },
                   { name: "ติดต่อเรา", to: "/contact" },
                   { name: "บล็อก", to: "/blog" },
@@ -191,7 +191,7 @@ export default function Navbar() {
 
               {/* cart icon */}
               <NavLink
-                to="/cart"
+                to="/shoppingcart"
                 onClick={closeMobile}
                 className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
               >
