@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import Pagination from "@mui/material/Pagination";
 
+import Swal from "sweetalert2"
 export default function EditStock() {
   const [products, setStock] = useState([
     {
@@ -80,10 +81,8 @@ export default function EditStock() {
       };
 
       setStock([...products, newProduct]);
-    }
 
     setShowModal(false);
-    setShowSuccess(true);
     setForm({ product: "", adjustmentType: "", quantity: "", note: "" });
     setEditingProduct(null);
     setIsEditing(false);
@@ -99,6 +98,45 @@ export default function EditStock() {
   const handlePageChange = (_, page) => {
     setCurrentPage(page);
   };
+        if (isEditing && editingProduct) {
+            const updatedProduct = {
+                ...editingProduct,
+                product: form.product,
+                quantity: parseInt(form.quantity),
+                adjustmentType: form.adjustmentType,
+                stockAdjuster: "ผู้ใช้ระบบ",
+                stockAdjustmentAt: timestamp,
+            };
+
+            setStock(
+                products.map((item) =>
+                    item.id === editingProduct.id ? updatedProduct : item
+                )
+            );
+        } else {
+            const newProduct = {
+                id: products.length + 1,
+                code: (products.length + 1).toString().padStart(7, "0"),
+                product: form.product,
+                quantity: parseInt(form.quantity),
+                adjustmentType: form.adjustmentType,
+                stockAdjuster: "ผู้ใช้ระบบ",
+                stockAdjustmentAt: timestamp,
+            };
+
+            setStock([...products, newProduct]);
+        }
+
+       
+
+        // ✅ SweetAlert2 success popup
+        Swal.fire({
+            icon: "success",
+            title: "บันทึกข้อมูลสำเร็จ",
+            confirmButtonText: "ตกลง",
+            confirmButtonColor: "#1a202c",
+        });
+    };
 
     return (
         <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
@@ -278,21 +316,7 @@ export default function EditStock() {
         </div>
       )}
 
-      {/* Success Popup */}
-      {showSuccess && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 text-center max-w-xs">
-            <div className="text-green-500 text-4xl mb-4">✔️</div>
-            <p className="font-semibold mb-4">บันทึกข้อมูลสำเร็จ</p>
-            <button
-              onClick={() => setShowSuccess(false)}
-              className="px-4 py-2 rounded bg-gray-900 text-white"
-            >
-              ตกลง
-            </button>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }
