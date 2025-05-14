@@ -100,29 +100,24 @@ export default function EditStock() {
     setCurrentPage(page);
   };
 
-  return (
-    <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
-      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3">
-          <h1 className="text-lg sm:text-xl font-semibold">ปรับสต็อก</h1>
-          <button
-            onClick={() => {
-              setForm({
-                product: "",
-                adjustmentType: "",
-                quantity: "",
-                note: "",
-              });
-              setEditingProduct(null);
-              setIsEditing(false);
-              setShowModal(true);
-            }}
-            className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl"
-          >
-            <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
-          </button>
-        </div>
+    return (
+        <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
+            <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3">
+                    <h1 className="text-lg sm:text-xl font-semibold">ปรับสต็อก</h1>
+                    <button
+                        onClick={() => {
+                            setForm({ product: "", adjustmentType: "", quantity: "", note: "" });
+                            setEditingProduct(null);
+                            setIsEditing(false);
+                            setShowModal(true);
+                        }}
+                        className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm"
+                    >
+                        <FaPlus />
+                        เพิ่มข้อมูล
+                    </button>
+                </div>
 
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
