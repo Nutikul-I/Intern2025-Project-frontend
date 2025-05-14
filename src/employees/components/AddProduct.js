@@ -212,9 +212,7 @@ export default function AddProduct() {
                                 <select
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     value={formData.product}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, product: e.target.value })
-                                    }
+                                    onChange={(e) => setFormData({ ...formData, product: e.target.value })}
                                 >
                                     <option value="">เลือกสินค้า</option>
                                     <option value="IPHONE 14 PRO">IPHONE 14 PRO</option>
@@ -230,9 +228,7 @@ export default function AddProduct() {
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     placeholder="placeholder"
                                     value={formData.quantity}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, quantity: e.target.value })
-                                    }
+                                    onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                                 />
                             </div>
 
@@ -244,17 +240,14 @@ export default function AddProduct() {
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     placeholder="placeholder"
                                     value={formData.documentNumber}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, documentNumber: e.target.value })
-                                    }
+                                    onChange={(e) => setFormData({ ...formData, documentNumber: e.target.value })}
                                 />
                             </div>
 
-                            {/* อัปโหลดหลายไฟล์พร้อมพรีวิว */}
+                            {/* อัปโหลดไฟล์พร้อมพรีวิว */}
                             <div>
-                                <label className="block mb-1 font-medium">เอกสารประกอบ (สูงสุด 5 รูป)</label>
+                                <label className="block mb-1 font-medium">เอกสารประกอบ (สูงสุด 5 รูป) ไม่เกิน 10 mb</label>
                                 <div className="grid grid-cols-5 gap-2">
-                                    {/* รูป preview */}
                                     {formData.files.map((f, index) => (
                                         <div key={index} className="relative group">
                                             <img
@@ -276,11 +269,9 @@ export default function AddProduct() {
                                         </div>
                                     ))}
 
-                                    {/* ปุ่มอัปโหลด ถ้ายังไม่ครบ 5 รูป */}
                                     {formData.files.length < 5 && (
                                         <label className="w-full h-20 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-500 cursor-pointer hover:border-gray-400">
-                                            {/* <span className="text-sm">+ เพิ่มรูป</span> */}
-                                            <FaUpload/> 
+                                            <FaUpload />
                                             <input
                                                 type="file"
                                                 accept="image/png, image/jpeg"
@@ -288,6 +279,12 @@ export default function AddProduct() {
                                                 className="hidden"
                                                 onChange={(e) => {
                                                     const files = Array.from(e.target.files);
+                                                    const oversizedFiles = files.filter((file) => file.size > 10 * 1024 * 1024);
+
+                                                    if (oversizedFiles.length > 0) {
+                                                        alert("ไม่สามารถอัปโหลดไฟล์ที่มีขนาดเกิน 10MB ได้");
+                                                    }
+
                                                     const validFiles = files.filter(
                                                         (file) =>
                                                             ["image/jpeg", "image/png"].includes(file.type) &&
@@ -321,9 +318,7 @@ export default function AddProduct() {
                                     rows={3}
                                     placeholder="placeholder"
                                     value={formData.note || ""}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, note: e.target.value })
-                                    }
+                                    onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                                 ></textarea>
                             </div>
                         </div>
@@ -346,7 +341,6 @@ export default function AddProduct() {
                     </div>
                 </div>
             )}
-
 
 
 
