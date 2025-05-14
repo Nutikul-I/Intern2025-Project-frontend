@@ -1,11 +1,9 @@
-// src/pages/AddProduct.js
 import { useState } from "react";
 import {
     FaPencilAlt,
     FaTrash,
     FaPlus,
-    FaAngleLeft,
-    FaAngleRight,
+    FaUpload,
 } from "react-icons/fa";
 
 export default function AddProduct() {
@@ -29,9 +27,11 @@ export default function AddProduct() {
         documentNumber: "",
         importer: "",
         note: "",
+        files: [],
     });
 
     const [editingProduct, setEditingProduct] = useState(null);
+
     const openAdd = () => {
         setEditingProduct(null);
         setFormData({
@@ -40,6 +40,7 @@ export default function AddProduct() {
             documentNumber: "",
             importer: "",
             note: "",
+            files: [],
         });
         setShowForm(true);
     };
@@ -52,6 +53,7 @@ export default function AddProduct() {
             documentNumber: item.documentNumber,
             importer: item.importer,
             note: item.note || "",
+            files: item.files || [],
         });
         setShowForm(true);
     };
@@ -60,9 +62,29 @@ export default function AddProduct() {
         setProducts((prev) => prev.filter((p) => p.id !== item.id));
     };
 
+    const handleCloseForm = () => {
+        formData.files.forEach((f) => URL.revokeObjectURL(f.url));
+        setFormData({
+            product: "",
+            quantity: "",
+            documentNumber: "",
+            importer: "",
+            note: "",
+            files: [],
+        });
+        setShowForm(false);
+    };
+
     const handleSave = () => {
         const now = new Date();
-        const formattedDate = now.toLocaleDateString("th-TH") + " " + now.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" }) + "น.";
+        const formattedDate =
+            now.toLocaleDateString("th-TH") +
+            " " +
+            now.toLocaleTimeString("th-TH", {
+                hour: "2-digit",
+                minute: "2-digit",
+            }) +
+            "น.";
 
         if (editingProduct) {
             setProducts((prev) =>
@@ -168,25 +190,27 @@ export default function AddProduct() {
                     <button className="px-2 py-1 rounded hover:bg-gray-100">{">>"}</button>
                 </div>
             </div>
-
-            {/* Modal Form */}
             {showForm && (
                 <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-md relative">
+                    <div className="bg-white rounded-2xl p-8 w-full max-w-xl relative shadow-xl">
+                        {/* ปุ่มปิด */}
                         <button
                             onClick={() => setShowForm(false)}
-                            className="absolute top-4 right-5 text-xl"
+                            className="absolute top-4 right-5 text-2xl text-gray-500 hover:text-black"
                         >
                             ✕
                         </button>
-                        <h2 className="text-lg font-semibold mb-4">นำเข้าสินค้า</h2>
 
-                        <div className="space-y-4 text-sm">
-                            {/* เลือกสินค้า */}
+                        {/* หัวข้อ */}
+                        <h2 className="text-xl font-semibold mb-6 text-gray-700">นำเข้าสินค้า</h2>
+
+                        {/* ฟอร์ม */}
+                        <div className="space-y-5 text-base text-gray-700">
+                            {/* สินค้า */}
                             <div>
                                 <label className="block mb-1 font-medium">สินค้า</label>
                                 <select
-                                    className="w-full border rounded px-3 py-2"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     value={formData.product}
                                     onChange={(e) =>
                                         setFormData({ ...formData, product: e.target.value })
@@ -203,7 +227,7 @@ export default function AddProduct() {
                                 <label className="block mb-1 font-medium">จำนวนที่นำเข้า</label>
                                 <input
                                     type="number"
-                                    className="w-full border rounded px-3 py-2"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     placeholder="placeholder"
                                     value={formData.quantity}
                                     onChange={(e) =>
@@ -217,7 +241,7 @@ export default function AddProduct() {
                                 <label className="block mb-1 font-medium">เลขเอกสารนำเข้า</label>
                                 <input
                                     type="text"
-                                    className="w-full border rounded px-3 py-2"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     placeholder="placeholder"
                                     value={formData.documentNumber}
                                     onChange={(e) =>
@@ -226,41 +250,74 @@ export default function AddProduct() {
                                 />
                             </div>
 
-                            {/* อัปโหลดไฟล์ */}
+                            {/* อัปโหลดหลายไฟล์พร้อมพรีวิว */}
                             <div>
-                                <label className="block mb-1 font-medium">เอกสารประกอบ</label>
-                                <div className="border rounded-lg px-3 py-6 text-center cursor-pointer bg-gray-50 hover:bg-gray-100">
-                                    <input
-                                        type="file"
-                                        accept="image/png, image/jpeg"
-                                        onChange={(e) => {
-                                            const file = e.target.files[0];
-                                            if (file && file.size <= 10 * 1024 * 1024) {
-                                                setFormData({ ...formData, file });
-                                            } else {
-                                                alert("ไฟล์ต้องไม่เกิน 10MB และเป็น PNG หรือ JPG เท่านั้น");
-                                            }
-                                        }}
-                                    />
-                                    <p className="text-xs mt-2 text-gray-500">
-                                        รองรับไฟล์ png, jpg, jpeg ขนาดไม่เกิน 10 mb
-                                    </p>
-                                    <p className="text-xs text-gray-400">
-                                        ภาพเอกสารนำเข้าสินค้าหรือหลักฐานการนำเข้าสินค้า
-                                    </p>
+                                <label className="block mb-1 font-medium">เอกสารประกอบ (สูงสุด 5 รูป)</label>
+                                <div className="grid grid-cols-5 gap-2">
+                                    {/* รูป preview */}
+                                    {formData.files.map((f, index) => (
+                                        <div key={index} className="relative group">
+                                            <img
+                                                src={f.url}
+                                                alt={`preview-${index}`}
+                                                className="w-full h-20 object-cover rounded"
+                                            />
+                                            <button
+                                                onClick={() => {
+                                                    const newFiles = [...formData.files];
+                                                    URL.revokeObjectURL(newFiles[index].url);
+                                                    newFiles.splice(index, 1);
+                                                    setFormData({ ...formData, files: newFiles });
+                                                }}
+                                                className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                    {/* ปุ่มอัปโหลด ถ้ายังไม่ครบ 5 รูป */}
+                                    {formData.files.length < 5 && (
+                                        <label className="w-full h-20 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-500 cursor-pointer hover:border-gray-400">
+                                            {/* <span className="text-sm">+ เพิ่มรูป</span> */}
+                                            <FaUpload/> 
+                                            <input
+                                                type="file"
+                                                accept="image/png, image/jpeg"
+                                                multiple
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const files = Array.from(e.target.files);
+                                                    const validFiles = files.filter(
+                                                        (file) =>
+                                                            ["image/jpeg", "image/png"].includes(file.type) &&
+                                                            file.size <= 10 * 1024 * 1024
+                                                    );
+
+                                                    const remainingSlots = 5 - formData.files.length;
+                                                    const filesToAdd = validFiles.slice(0, remainingSlots);
+
+                                                    const newPreviews = filesToAdd.map((file) => ({
+                                                        file,
+                                                        url: URL.createObjectURL(file),
+                                                    }));
+
+                                                    setFormData({
+                                                        ...formData,
+                                                        files: [...formData.files, ...newPreviews],
+                                                    });
+                                                }}
+                                            />
+                                        </label>
+                                    )}
                                 </div>
-                                {formData.file && (
-                                    <div className="mt-2 text-xs text-gray-600">
-                                        ไฟล์ที่เลือก: {formData.file.name}
-                                    </div>
-                                )}
                             </div>
 
                             {/* หมายเหตุ */}
                             <div>
                                 <label className="block mb-1 font-medium">หมายเหตุ</label>
                                 <textarea
-                                    className="w-full border rounded px-3 py-2"
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2"
                                     rows={3}
                                     placeholder="placeholder"
                                     value={formData.note || ""}
@@ -272,16 +329,16 @@ export default function AddProduct() {
                         </div>
 
                         {/* ปุ่ม */}
-                        <div className="flex justify-end gap-2 mt-6">
+                        <div className="flex justify-end gap-3 mt-8">
                             <button
                                 onClick={() => setShowForm(false)}
-                                className="px-4 py-2 border rounded text-sm"
+                                className="px-5 py-2 border border-gray-400 rounded-lg text-gray-600 hover:bg-gray-100"
                             >
                                 ยกเลิก
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="px-4 py-2 bg-gray-900 text-white rounded text-sm"
+                                className="px-5 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800"
                             >
                                 บันทึก
                             </button>
@@ -289,6 +346,9 @@ export default function AddProduct() {
                     </div>
                 </div>
             )}
+
+
+
 
 
             {/* Success Modal */}
