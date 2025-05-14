@@ -114,7 +114,6 @@ export default function EditStock() {
                         }}
                         className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm"
                     >
-                        <FaPlus />
                         เพิ่มข้อมูล
                     </button>
                 </div>
