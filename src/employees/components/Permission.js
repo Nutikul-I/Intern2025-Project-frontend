@@ -96,12 +96,12 @@ export default function UserRolePage() {
       <div className="w-full max-w-7xl ">
         {/* Header */}
         <div className="bg-white rounded-t-xl shadow-sm p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h2 className="text-lg font-semibold text-gray-800">สิทธิ์ผู้ใช้งาน</h2>
+          <h2 className="text-lg sm:text-xl font-semibold">สิทธิ์ผู้ใช้งาน</h2>
           <button
             onClick={() => { setSelectedRole(null); setShowModal(true); }}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 text-sm w-full sm:w-auto"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
           >
-            เพิ่มข้อมูล
+            <span className="text-sm sm:text-base">เพิ่มข้อมูล</span> 
           </button>
         </div>
 
