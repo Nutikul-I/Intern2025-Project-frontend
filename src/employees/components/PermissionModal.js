@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import Swal from "sweetalert2";
 
 const MODULES = ["ลูกค้า", "พนักงาน", "ตำแหน่ง"];
 const PERMISSIONS = ["ดู", "สร้าง", "แก้ไข", "ลบ"];
@@ -28,7 +29,6 @@ export default function PermissionModal({ isOpen, onClose, onSave, defaultData }
     }));
   };
 
-  // ✅ ฟังก์ชันเลือก/ไม่เลือกทั้งคอลัมน์
   const handleToggleColumn = (perm) => {
     const allChecked = MODULES.every((mod) => permissions?.[mod]?.[perm]);
     const updated = {};
@@ -44,13 +44,58 @@ export default function PermissionModal({ isOpen, onClose, onSave, defaultData }
     }));
   };
 
-  // ✅ ตรวจสอบว่าแต่ละคอลัมน์ถูกเลือกหมดไหม
+  const handleToggleRow = (mod) => {
+    const allChecked = PERMISSIONS.every((perm) => permissions?.[mod]?.[perm]);
+    const updated = {};
+    PERMISSIONS.forEach((perm) => {
+      updated[perm] = !allChecked;
+    });
+    setPermissions((prev) => ({
+      ...prev,
+      [mod]: updated,
+    }));
+  };
+
+  const handleToggleAll = () => {
+    const allChecked = isAllChecked();
+    const updated = {};
+    MODULES.forEach((mod) => {
+      updated[mod] = {};
+      PERMISSIONS.forEach((perm) => {
+        updated[mod][perm] = !allChecked;
+      });
+    });
+    setPermissions(updated);
+  };
+
   const isColumnAllChecked = (perm) =>
     MODULES.every((mod) => permissions?.[mod]?.[perm]);
+
+  const isRowAllChecked = (mod) =>
+    PERMISSIONS.every((perm) => permissions?.[mod]?.[perm]);
+
+  const isAllChecked = () =>
+    MODULES.every((mod) =>
+      PERMISSIONS.every((perm) => permissions?.[mod]?.[perm])
+    );
 
   const handleSave = () => {
     const payload = { name: roleName, permissions };
     onSave(payload);
+
+    // ✅ SweetAlert2 แจ้งสำเร็จ
+    Swal.fire({
+      icon: "success",
+      title: "บันทึกข้อมูลสำเร็จ",
+      confirmButtonText: "ตกลง",
+      customClass: {
+        confirmButton: "bg-black text-white rounded px-6 py-2 text-sm",
+        popup: "rounded-xl",
+      },
+      buttonsStyling: false,
+    }).then(() => {
+      onClose(); // ✅ ปิด modal หลังจากผู้ใช้กดตกลง
+    });
   };
 
   if (!isOpen) return null;
@@ -84,6 +129,7 @@ export default function PermissionModal({ isOpen, onClose, onSave, defaultData }
             <thead>
               <tr className="bg-black text-white">
                 <th className="text-left px-3 py-2">รายการ</th>
+                <th className="text-center px-3 py-2">ทั้งหมด</th>
                 {PERMISSIONS.map((perm) => (
                   <th key={perm} className="px-3 py-2 text-center whitespace-nowrap">
                     {perm}
@@ -95,6 +141,13 @@ export default function PermissionModal({ isOpen, onClose, onSave, defaultData }
               {/* ✅ แถว “ทั้งหมด” */}
               <tr className="bg-gray-100 border-b font-medium">
                 <td className="text-left px-3 py-2">ทั้งหมด</td>
+                <td className="text-center px-3 py-2">
+                  <input
+                    type="checkbox"
+                    checked={isAllChecked()}
+                    onChange={handleToggleAll}
+                  />
+                </td>
                 {PERMISSIONS.map((perm) => (
                   <td key={perm} className="text-center px-3 py-2">
                     <input
@@ -106,12 +159,19 @@ export default function PermissionModal({ isOpen, onClose, onSave, defaultData }
                 ))}
               </tr>
 
-              {/* ✅ รายการปกติ */}
+              {/* ✅ รายการโมดูล */}
               {MODULES.map((mod) => (
                 <tr key={mod} className="border-b">
                   <td className="px-3 py-2">{mod}</td>
+                  <td className="text-center px-3 py-2">
+                    <input
+                      type="checkbox"
+                      checked={isRowAllChecked(mod)}
+                      onChange={() => handleToggleRow(mod)}
+                    />
+                  </td>
                   {PERMISSIONS.map((perm) => (
-                    <td key={perm} className="text-center">
+                    <td key={perm} className="text-center px-3 py-2">
                       <input
                         type="checkbox"
                         checked={permissions?.[mod]?.[perm] || false}

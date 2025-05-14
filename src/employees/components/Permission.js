@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
 import PermissionModal from "../components/PermissionModal";
 
 // จำลอง total 85 รายการ
@@ -21,36 +22,13 @@ export default function UserRolePage() {
   const [selectedRole, setSelectedRole] = useState(null);
 
   const itemsPerPage = 10;
-  const totalItems = mockAllRoles.length;
+  const totalItems = allRoles.length;
 
-  // จำลองการโหลดข้อมูลตามหน้าปัจจุบัน
-  const fetchRoles = async (page) => {
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const pageData = mockAllRoles.slice(startIndex, endIndex);
-    setRoles(pageData);
-  };
-
-  // โหลดข้อมูลตาม currentPage
   useEffect(() => {
-    fetchRoles(currentPage);
-  }, [currentPage]);
-
-  // สร้างข้อมูลทั้งหมดเมื่อ component mount
-  useEffect(() => {
-    const fakeData = Array.from({ length: totalItems }, (_, index) => ({
-      id: String(index + 1).padStart(7, "0"),
-      name: `สิทธิ์ที่ ${index + 1}`,
-      description: `รายละเอียดของสิทธิ์ที่ ${index + 1}`,
-      permissions: {
-        ลูกค้า: { ดู: true },
-        พนักงาน: { ดู: true },
-      },
-    }));
+    const fakeData = mockAllRoles;
     setAllRoles(fakeData);
   }, []);
 
-  // อัปเดตรายการหน้าที่เลือกเมื่อข้อมูลเปลี่ยน
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -76,10 +54,44 @@ export default function UserRolePage() {
     setShowModal(true);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100  p-0 flex justify-center">
-      <div className="w-full max-w-7xl">
+  const handleDelete = (roleId) => {
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "การลบนี้ไม่สามารถย้อนกลับได้",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#000000",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ลบข้อมูล",
+      cancelButtonText: "ยกเลิก",
+      customClass: {
+        popup: "rounded-xl",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updated = allRoles.filter((r) => r.id !== roleId);
+        setAllRoles(updated);
 
+        const newPage = Math.ceil(updated.length / itemsPerPage);
+        if (currentPage > newPage) setCurrentPage(newPage);
+
+        Swal.fire({
+          icon: "success",
+          title: "ลบข้อมูลสำเร็จ",
+          confirmButtonText: "ตกลง",
+          customClass: {
+            confirmButton: "bg-black text-white rounded px-6 py-2 text-sm",
+            popup: "rounded-xl",
+          },
+          buttonsStyling: false,
+        });
+      }
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-0 flex justify-center">
+      <div className="w-full max-w-7xl">
         {/* Header */}
         <div className="bg-white rounded-t-xl shadow-sm p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-lg font-semibold text-gray-800">สิทธิ์ผู้ใช้งาน</h2>
@@ -119,7 +131,10 @@ export default function UserRolePage() {
                       >
                         <Pencil size={16} />
                       </button>
-                      <button className="text-red-500 hover:text-red-600">
+                      <button
+                        className="text-red-500 hover:text-red-600"
+                        onClick={() => handleDelete(role.id)}
+                      >
                         <Trash2 size={16} />
                       </button>
                     </div>
