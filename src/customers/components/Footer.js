@@ -34,8 +34,7 @@ export default function SiteFooter() {
             We are a residential interior design firm located in Portland.
             Our boutique studio offers more than
           </p>
-
-          <div className="flex items-center space-x-4 sm:space-x-5 xl:space-x-6">
+          <div className="flex items-center gap-4 sm:gap-5 xl:gap-6">
             {[
               [faTwitter, "Twitter"],
               [faFacebookF, "Facebook"],
@@ -46,12 +45,17 @@ export default function SiteFooter() {
                 key={label}
                 href="#"
                 aria-label={label}
-                className="hover:opacity-80 transition-opacity"
+                className="group hover:opacity-80 transition-opacity"
               >
-                <FontAwesomeIcon
-                  icon={ico}
-                  className="h-4 w-4 sm:h-5 sm:w-5 xl:h-6 xl:w-6"
-                />
+                <div
+                  className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 xl:w-14 xl:h-14
+                            rounded-full"
+                >
+                  <FontAwesomeIcon
+                    icon={ico}
+                    className="text-white text-lg sm:text-xl xl:text-2xl"
+                  />
+                </div>
               </a>
             ))}
           </div>
