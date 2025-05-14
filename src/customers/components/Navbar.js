@@ -94,7 +94,10 @@ export default function Navbar() {
         {/* ---- desktop icons + user ---- */}
         <div className="hidden md:flex items-center space-x-4">
           {/* Cart icon */}
-          <NavLink to="/shoppingcart" className="text-gray-600 hover:text-gray-900">
+          <NavLink
+            to="/shoppingcart"
+            className="text-gray-600 hover:text-gray-900"
+          >
             <FiShoppingCart size={24} />
           </NavLink>
 
@@ -109,6 +112,13 @@ export default function Navbar() {
 
             {openUser && (
               <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-32 ml-16 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                <NavLink
+                  to="/editinfo"
+                  onClick={closeMobile}
+                  className="block w-full px-4 py-2 text-sm text-center text-gray-700 hover:bg-gray-100"
+                >
+                  ข้อมูลส่วนตัว
+                </NavLink>
                 <button
                   onClick={handleSignOut}
                   className="block w-full px-4 py-2 text-sm text-center text-gray-700 hover:bg-gray-100"
@@ -192,7 +202,14 @@ export default function Navbar() {
           )}
 
           {mobileTab === "account" && (
-            <div className="space-y-2">
+            <div className="space-y-1">
+              <NavLink
+                to="/editinfo"
+                onClick={closeMobile}
+                className="w-full block px-4 py-2 bg-gray-500 text-white rounded-lg text-center hover:bg-red-600"
+              >
+                แก้ไขข้อมูลส่วนตัว
+              </NavLink>
               <button
                 onClick={() => {
                   closeMobile();
