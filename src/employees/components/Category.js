@@ -64,7 +64,8 @@ export default function CategoryList() {
               <span className="text-sm sm:text-base">เพิ่มหมวดหมู่</span>
             </button>
           </div>
-
+          
+          {/* Table */}
           <table className="min-w-full text-xs sm:text-sm">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>

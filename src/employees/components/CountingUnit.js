@@ -1,12 +1,7 @@
 // src/pages/CountingUnit.js
 import { useState } from "react";
-import {
-  FaPencilAlt,
-  FaTrash,
-  FaPlus,
-  FaAngleLeft,
-  FaAngleRight,
-} from "react-icons/fa";
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import Pagination from "@mui/material/Pagination";
 
 export default function CountingUnit() {
   const [units, setUnits] = useState([
@@ -31,9 +26,9 @@ export default function CountingUnit() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [unitName, setUnitName] = useState("");
   const [editingUnit, setEditingUnit] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
   const totalPages = Math.ceil(units.length / itemsPerPage);
   const currentData = units.slice(
     (currentPage - 1) * itemsPerPage,
@@ -71,9 +66,7 @@ export default function CountingUnit() {
     if (editingUnit) {
       setUnits((prev) =>
         prev.map((u) =>
-          u.id === editingUnit.id
-            ? { ...u, unitName, updatedAt: now }
-            : u
+          u.id === editingUnit.id ? { ...u, unitName, updatedAt: now } : u
         )
       );
     } else {
@@ -99,17 +92,20 @@ export default function CountingUnit() {
     setShowSuccess(true);
   };
 
+  const handlePageChange = (_, page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
-      {/* Header */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
           <h1 className="text-lg sm:text-xl font-semibold">หน่วยนับ</h1>
           <button
             onClick={openAdd}
             className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
           >
-            <FaPlus />
             <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
           </button>
         </div>
@@ -119,17 +115,23 @@ export default function CountingUnit() {
           <table className="min-w-full text-xs sm:text-sm">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-20">รหัส</th>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">ชื่อหน่วยนับ</th>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">จัดการ</th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-20">
+                  รหัส
+                </th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                  ชื่อหน่วยนับ
+                </th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">
+                  จัดการ
+                </th>
               </tr>
             </thead>
             <tbody>
               {currentData.map((u) => (
                 <tr key={u.id} className="border-t">
-                  <td className="px-2 sm:px-4 py-2">{u.code}</td>
-                  <td className="px-2 sm:px-4 py-2">{u.unitName}</td>
-                  <td className="px-2 sm:px-4 py-2 text-center">
+                  <td className="px-2 sm:px-4 py-1 sm:py-3">{u.code}</td>
+                  <td className="px-2 sm:px-4 py-1 sm:py-3">{u.unitName}</td>
+                  <td className="px-2 sm:px-4 py-1 sm:py-3 text-center">
                     <div className="flex justify-center gap-2 text-base">
                       <FaPencilAlt
                         className="cursor-pointer text-yellow-500"
@@ -148,56 +150,21 @@ export default function CountingUnit() {
         </div>
       </div>
 
-      {/* Pagination */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 text-xs sm:text-sm">
-        {/* รายการ */}
-        <div className="text-gray-600 mb-2 sm:mb-0">
-          แสดง {Math.min((currentPage - 1) * itemsPerPage + 1, units.length)} -{" "}
-          {Math.min(currentPage * itemsPerPage, units.length)} จากทั้งหมด {units.length} รายการ
-        </div>
-
-        {/* ปุ่ม */}
-        <div className="flex items-center gap-1">
-          <button
-            className={`p-1 rounded ${currentPage === 1
-                ? "text-gray-400 cursor-not-allowed"
-                : "hover:bg-gray-100"
-              }`}
-            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <FaAngleLeft />
-          </button>
-
-          {[...Array(totalPages)].map((_, i) => {
-            const n = i + 1;
-            return (
-              <button
-                key={n}
-                onClick={() => setCurrentPage(n)}
-                className={`px-2 py-1 rounded ${currentPage === n
-                    ? "bg-gray-900 text-white"
-                    : "hover:bg-gray-100 text-gray-700"
-                  }`}
-              >
-                {n}
-              </button>
-            );
-          })}
-
-          <button
-            className={`p-1 rounded ${currentPage === totalPages
-                ? "text-gray-400 cursor-not-allowed"
-                : "hover:bg-gray-100"
-              }`}
-            onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            <FaAngleRight />
-          </button>
-        </div>
+      {/* Summary + Pagination */}
+      <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
+        <span>
+          แสดง {(currentPage - 1) * itemsPerPage + 1}-
+          {Math.min(currentPage * itemsPerPage, units.length)} จากทั้งหมด{" "}
+          {units.length} รายการ
+        </span>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          shape="rounded"
+        />
       </div>
-
 
       {/* --- Form Modal --- */}
       {showForm && (

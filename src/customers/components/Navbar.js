@@ -119,6 +119,13 @@ export default function Navbar() {
                 >
                   ข้อมูลส่วนตัว
                 </NavLink>
+                <NavLink
+                  to="/orderhistory"
+                  onClick={closeMobile}
+                  className="block w-full px-4 py-2 text-sm text-center text-gray-700 hover:bg-gray-100"
+                >
+                  รายการสั่งซื้อ
+                </NavLink>
                 <button
                   onClick={handleSignOut}
                   className="block w-full px-4 py-2 text-sm text-center text-gray-700 hover:bg-gray-100"
@@ -206,9 +213,16 @@ export default function Navbar() {
               <NavLink
                 to="/editinfo"
                 onClick={closeMobile}
-                className="w-full block px-4 py-2 bg-gray-500 text-white rounded-lg text-center hover:bg-red-600"
+                className="w-full block px-4 py-2 bg-gray-800 text-white rounded-lg text-center hover:bg-red-600"
               >
                 แก้ไขข้อมูลส่วนตัว
+              </NavLink>
+              <NavLink
+                to="/orderhistory"
+                onClick={closeMobile}
+                className="w-full block px-4 py-2 bg-green-700 text-white rounded-lg text-center hover:bg-red-600"
+              >
+                รายการสั่งซื้อ
               </NavLink>
               <button
                 onClick={() => {

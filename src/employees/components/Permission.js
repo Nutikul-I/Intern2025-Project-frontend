@@ -95,7 +95,7 @@ export default function UserRolePage() {
     <div className="min-h-screen bg-gray-100 p-0 flex justify-center">
       <div className="w-full max-w-7xl ">
         {/* Header */}
-        <div className="bg-white rounded-t-xl shadow-sm p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="bg-white rounded-t-xl shadow-sm p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-lg sm:text-xl font-semibold">สิทธิ์ผู้ใช้งาน</h2>
           <button
             onClick={() => { setSelectedRole(null); setShowModal(true); }}
