@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaMobileAlt,
   FaCamera,
@@ -85,7 +86,6 @@ export default function Home() {
     },
   ];
 
-  
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [visibleCount, setVisibleCount] = useState(8);
   const filteredItems = selectedCategory
@@ -104,8 +104,19 @@ export default function Home() {
     { icon: FaGamepad, label: "เกมมิ่ง" },
   ];
 
-  const tabs = ["สินค้ามาใหม่", "ขายดี", "แนะนำ"];
+  const navigate = useNavigate();
+  const tabs = ["สินค้ามาใหม่", "ขายดี", "แนะนำ", "สินค้าทั้งหมด"];
   const [activeTab, setActiveTab] = useState(0);
+
+  const handleTabClick = (idx) => {
+    if (tabs[idx] === "สินค้าทั้งหมด") {
+      // ถ้าเป็น tab สินค้าทั้งหมด ก็ไปหน้า /allproduct
+      navigate("/allproduct");
+    } else {
+      // มิฉะนั้นเปลี่ยน active tab ตามปกติ
+      setActiveTab(idx);
+    }
+  };
 
   /* ---------- render -------------- */
   return (
@@ -195,7 +206,7 @@ export default function Home() {
           {tabs.map((t, idx) => (
             <button
               key={t}
-              onClick={() => setActiveTab(idx)}
+              onClick={() => handleTabClick(idx)}
               className={`py-2 text-sm font-medium ${
                 activeTab === idx
                   ? "border-b-2 border-black"
