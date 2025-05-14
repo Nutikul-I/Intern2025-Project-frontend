@@ -132,9 +132,9 @@ export default function EmployeePage() {
                 <td className="px-4 py-3">{emp.email}</td>
                 <td className="px-4 py-3">{emp.phone}</td>
                 <td className="px-4 py-3">{emp.role}</td>
-                <td className="px-4 py-3 gap-2 items-center flex justify-center">
+                <td className="px-4 py-3 gap-2 items-center flex justify-center text-base">
                   <FaPencilAlt
-                    className="cursor-pointer text-yellow-500 mr-2"
+                    className="cursor-pointer text-yellow-500"
                     onClick={() => handleEdit(emp)}
                   />
                   <FaTrash
