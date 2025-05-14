@@ -97,7 +97,6 @@ export default function AddProduct() {
   const totalItems = products.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentProducts = products.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (_, page) => {
     setCurrentPage(page);
@@ -105,8 +104,8 @@ export default function AddProduct() {
 
   return (
     <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
-      {/* Header */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+              {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3">
           <h1 className="text-lg sm:text-xl font-semibold">นำเข้าสินค้า</h1>
           <button
