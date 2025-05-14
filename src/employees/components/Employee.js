@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import EmployeeModal from "./EmployeeModal";
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import Pagination from "@mui/material/Pagination";
+
 
 export default function EmployeePage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -80,13 +83,17 @@ export default function EmployeePage() {
 
   const totalPages = Math.ceil(allEmployees.length / itemsPerPage);
 
+  const handlePageChange = (_, page) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className="p-w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
+    <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
           <h2 className="text-lg sm:text-xl font-semibold">พนักงาน</h2>
           <button
-            className="bg-black text-white px-4 py-2 rounded"
+            className="bg-black text-white px-4 py-2 rounded-xl"
             onClick={() => {
               setSelectedEmployee(null); // ✅ clear ก่อนเปิดเพิ่ม
               setModalOpen(true);
@@ -100,80 +107,62 @@ export default function EmployeePage() {
           <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
             <tr>
               <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">รหัส</th>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">ชื่อ - นามสกุล</th>
-              <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">อีเมล</th>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">เบอร์โทรศัพท์</th>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">สิทธิ์ผู้ใช้งาน</th>
-              <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">จัดการ</th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                ชื่อ - นามสกุล
+              </th>
+              <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">
+                อีเมล
+              </th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                เบอร์โทรศัพท์
+              </th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                สิทธิ์ผู้ใช้งาน
+              </th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">
+                จัดการ
+              </th>
             </tr>
           </thead>
           <tbody>
             {employees.map((emp) => (
               <tr key={emp.code} className="border-t">
-                <td className="px-4 py-2">{emp.code}</td>
-                <td className="px-4 py-2">{emp.name}</td>
-                <td className="px-4 py-2">{emp.email}</td>
-                <td className="px-4 py-2">{emp.phone}</td>
-                <td className="px-4 py-2">{emp.role}</td>
-                <td className="px-4 py-2">
-                  <button
-                    className="text-yellow-500 mr-2"
+                <td className="px-4 py-3">{emp.code}</td>
+                <td className="px-4 py-3">{emp.name}</td>
+                <td className="px-4 py-3">{emp.email}</td>
+                <td className="px-4 py-3">{emp.phone}</td>
+                <td className="px-4 py-3">{emp.role}</td>
+                <td className="px-4 py-3 gap-2 items-center flex justify-center">
+                  <FaPencilAlt
+                    className="cursor-pointer text-yellow-500 mr-2"
                     onClick={() => handleEdit(emp)}
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    className="text-red-500"
+                  />
+                  <FaTrash
+                    className="cursor-pointer text-red-500"
                     onClick={() => handleDelete(emp.code)}
-                  >
-                    🗑️
-                  </button>
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-
-        {/* Pagination */}
+      </div>
+      {/* Summary + MUI Pagination */}
         <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
           <div>
             แสดง {(currentPage - 1) * itemsPerPage + 1} -{" "}
             {Math.min(currentPage * itemsPerPage, allEmployees.length)} จาก{" "}
             {allEmployees.length} รายการ
           </div>
-          <div className="flex gap-1 items-center">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="px-2 py-1 border rounded disabled:opacity-50"
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-              <button
-                key={num}
-                onClick={() => setCurrentPage(num)}
-                className={`px-3 py-1 rounded border ${
-                  currentPage === num
-                    ? "bg-black text-white border-black"
-                    : "hover:bg-gray-200"
-                }`}
-              >
-                {num}
-              </button>
-            ))}
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              className="px-2 py-1 border rounded disabled:opacity-50"
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            shape="rounded"
+          />
         </div>
-      </div>
+      
 
       {modalOpen && (
         <EmployeeModal
