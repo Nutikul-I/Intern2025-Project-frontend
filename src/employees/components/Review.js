@@ -47,8 +47,8 @@ export default function ReviewPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 px-4 py-6 flex justify-center overflow-hidden">
-      <div className="w-full max-w-6xl">
+    <div className="min-h-screen bg-gray-100 p-0 flex justify-center overflow-hidden">
+      <div className="w-full max-w-7xl">
         {/* Header */}
         <div className="bg-white rounded-t-xl shadow-sm p-4">
           <h2 className="text-base sm:text-lg font-bold">รีวิว</h2>
@@ -66,11 +66,11 @@ export default function ReviewPage() {
             </colgroup>
             <thead className="text-gray-600 border-b bg-white text-center sm:text-center">
               <tr>
-                <th className="px-4 py-3 sm:text-center">รหัส</th>
-                <th className="px-4 py-3 sm:text-center">ชื่อสินค้า</th>
-                <th className="px-4 py-3 sm:text-center">เรต</th>
-                <th className="px-4 py-3 hidden sm:table-cell">ข้อความ</th>
-                <th className="px-4 py-3 sm:text-center">รายละเอียด</th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 sm:text-center">รหัส</th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 sm:text-center">ชื่อสินค้า</th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 sm:text-center">เรต</th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 hidden sm:table-cell">ข้อความ</th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 sm:text-center">รายละเอียด</th>
               </tr>
             </thead>
             <tbody>
@@ -78,7 +78,7 @@ export default function ReviewPage() {
                 <tr key={rev.id} className="hover:bg-gray-50 border-b items-center">
                   <td className="px-4 py-3 truncate">{rev.id}</td>
                   <td className="px-4 py-3 truncate">{rev.productName}</td>
-                  <td className="px-4 py-3">{renderStars(rev.rating)}</td>
+                  <td className="px-4 py-3  items-center">{renderStars(rev.rating)}</td>
                   <td className="px-3 py-3 text-xs hidden sm:table-cell leading-tight line-clamp-2 truncate break-words max-w-[250px]">
                     {rev.message + "..."}
                   </td>

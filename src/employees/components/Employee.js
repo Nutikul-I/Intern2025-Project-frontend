@@ -81,10 +81,10 @@ export default function EmployeePage() {
   const totalPages = Math.ceil(allEmployees.length / itemsPerPage);
 
   return (
-    <div className="p-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">พนักงาน</h2>
+    <div className="p-w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
+      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
+          <h2 className="text-lg sm:text-xl font-semibold">พนักงาน</h2>
           <button
             className="bg-black text-white px-4 py-2 rounded"
             onClick={() => {
@@ -96,15 +96,15 @@ export default function EmployeePage() {
           </button>
         </div>
 
-        <table className="w-full table-auto text-center">
-          <thead className="bg-gray-50">
+        <table className="min-w-full text-xs sm:text-sm">
+          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
             <tr>
-              <th className="px-4 py-2">รหัส</th>
-              <th className="px-4 py-2">ชื่อ - นามสกุล</th>
-              <th className="px-4 py-2">อีเมล</th>
-              <th className="px-4 py-2">เบอร์โทรศัพท์</th>
-              <th className="px-4 py-2">สิทธิ์ผู้ใช้งาน</th>
-              <th className="px-4 py-2">จัดการ</th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">รหัส</th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">ชื่อ - นามสกุล</th>
+              <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">อีเมล</th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">เบอร์โทรศัพท์</th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">สิทธิ์ผู้ใช้งาน</th>
+              <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">จัดการ</th>
             </tr>
           </thead>
           <tbody>

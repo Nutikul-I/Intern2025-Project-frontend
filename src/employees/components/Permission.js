@@ -77,8 +77,8 @@ export default function UserRolePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 px-4 sm:px-6 py-8 flex justify-center">
-      <div className="w-full max-w-6xl">
+    <div className="min-h-screen bg-gray-100  p-0 flex justify-center">
+      <div className="w-full max-w-7xl">
 
         {/* Header */}
         <div className="bg-white rounded-t-xl shadow-sm p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
