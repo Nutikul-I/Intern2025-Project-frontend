@@ -253,7 +253,7 @@ export default function Home() {
       <section
         className="
     relative w-full 
-    h-[260px] sm:h-[320px] md:h-[340px] lg:h-[400px] 
+    h-[260px] sm:h-[320px] md:h-[340px] lg:h-[450px] 
     flex items-center justify-center text-center text-white 
     bg-cover bg-center
   "
