@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FaPlus, FaPencilAlt, FaTrash, FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaPencilAlt, FaTrash,} from "react-icons/fa";
+import Pagination from "@mui/material/Pagination";
 import ProductFormModal from "./ProductFormModal.js";
 
 export default function ProductPage() {
@@ -38,7 +39,7 @@ export default function ProductPage() {
   const handleDelete = (p) =>
     setProducts((prev) => prev.filter((x) => x.id !== p.id));
 
-  /* ---------- pagination ---------- */
+    /* ---------- pagination ---------- */
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalItems   = products.length;
@@ -50,19 +51,8 @@ export default function ProductPage() {
   const displayStart = totalItems === 0 ? 0 : startIndex + 1;
   const displayEnd   = Math.min(startIndex + itemsPerPage, totalItems);
 
-  const getPageNumbers = () => {
-    if (totalPages <= 7) return [...Array(totalPages).keys()].map((i) => i + 1);
-    const pages = [1];
-    if (currentPage > 4) pages.push("…");
-    for (
-      let i = Math.max(2, currentPage - 1);
-      i <= Math.min(totalPages - 1, currentPage + 1);
-      i++
-    )
-      pages.push(i);
-    if (currentPage < totalPages - 3) pages.push("…");
-    pages.push(totalPages);
-    return pages;
+  const handlePageChange = (_, page) => {
+    setCurrentPage(page);
   };
 
   /* ---------- UI ---------- */
@@ -77,7 +67,6 @@ export default function ProductPage() {
               onClick={openAdd}
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
             >
-              <FaPlus />
               <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
             </button>
           </div>
@@ -126,53 +115,18 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Summary + Pagination */}
-        <div className="flex flex-wrap items-center justify-center sm:justify-between mt-4 gap-3 text-xs sm:text-sm">
-          <span className="text-gray-700">
+{/* ---------- Summary + MUI Pagination ---------- */}
+        <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
+          <span>
             แสดง {displayStart}-{displayEnd} จากทั้งหมด {totalItems} รายการ
           </span>
-
-          <nav>
-            <ul className="flex overflow-hidden rounded-full border border-gray-300 divide-x divide-gray-300">
-              {/* Prev */}
-              <li>
-                <button
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 flex items-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50"
-                >
-                  <FaAngleLeft size={12} />
-                </button>
-              </li>
-
-              {/* page numbers */}
-              {getPageNumbers().map((p, idx) =>
-                p === "…" ? (
-                  <li key={`dots-${idx}`} className="px-3 py-1 flex items-center">…</li>
-                ) : (
-                  <li key={p}>
-                    <button
-                      onClick={() => setCurrentPage(p)}
-                      className={`px-3 py-1 ${p === currentPage ? "bg-gray-900 text-white" : "hover:bg-gray-50"}`}
-                    >
-                      {p}
-                    </button>
-                  </li>
-                )
-              )}
-
-              {/* Next */}
-              <li>
-                <button
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 flex items-center disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50"
-                >
-                  <FaAngleRight size={12} />
-                </button>
-              </li>
-            </ul>
-          </nav>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            shape="rounded"
+          />
         </div>
       </div>
 
