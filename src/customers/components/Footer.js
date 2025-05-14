@@ -17,7 +17,7 @@ import {
  */
 export default function SiteFooter() {
   return (
-    <footer className="bg-black text-white text-[13px] sm:text-sm mt-16">
+    <footer className="bg-black text-white text-[13px] sm:text-sm">
       <div
         className="mx-auto max-w-6xl sm:max-w-7xl px-4 sm:px-6 lg:px-8
                    py-6 sm:py-8 lg:py-12 xl:py-14 2xl:py-16
