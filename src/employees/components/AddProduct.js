@@ -154,7 +154,7 @@ export default function AddProduct() {
                     {item.importer}
                   </td>
                   <td className="px-4 py-2 text-center hidden sm:table-cell">
-                    <div className="flex justify-center gap-2">
+                    <div className="flex justify-center gap-2 text-base">
                       <FaPencilAlt
                         className="text-yellow-500 cursor-pointer"
                         onClick={() => openEdit(item)}

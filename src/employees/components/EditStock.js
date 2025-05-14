@@ -161,7 +161,7 @@ export default function EditStock() {
                     {item.stockAdjuster}
                   </td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3 text-center">
-                    <div className="flex justify-center gap-2">
+                    <div className="flex justify-center gap-2 text-base">
                       <FaPencilAlt
                         className="text-yellow-500 cursor-pointer"
                         onClick={() => handleEdit(item)}
