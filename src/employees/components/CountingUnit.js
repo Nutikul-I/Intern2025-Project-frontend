@@ -17,12 +17,28 @@ export default function CountingUnit() {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     },
+    // เพิ่มรายการทดสอบมากกว่า 10 เพื่อดูผลลัพธ์การแบ่งหน้า
+    ...Array.from({ length: 23 }, (_, i) => ({
+      id: i + 2,
+      code: String(i + 2).padStart(7, "0"),
+      unitName: `หน่วยที่ ${i + 2}`,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    })),
   ]);
 
   const [showForm, setShowForm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [unitName, setUnitName] = useState("");
   const [editingUnit, setEditingUnit] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(units.length / itemsPerPage);
+  const currentData = units.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const openAdd = () => {
     setEditingUnit(null);
@@ -37,7 +53,14 @@ export default function CountingUnit() {
   };
 
   const handleDelete = (unit) => {
-    setUnits((prev) => prev.filter((u) => u.id !== unit.id));
+    const updated = units.filter((u) => u.id !== unit.id);
+    setUnits(updated);
+
+    // หากลบแล้วหน้าเกินจำนวนหน้าใหม่ ให้ปรับหน้า
+    const newTotalPages = Math.ceil(updated.length / itemsPerPage);
+    if (currentPage > newTotalPages) {
+      setCurrentPage(newTotalPages);
+    }
   };
 
   const handleSaveUnit = () => {
@@ -102,7 +125,7 @@ export default function CountingUnit() {
               </tr>
             </thead>
             <tbody>
-              {units.map((u) => (
+              {currentData.map((u) => (
                 <tr key={u.id} className="border-t">
                   <td className="px-2 sm:px-4 py-2">{u.code}</td>
                   <td className="px-2 sm:px-4 py-2">{u.unitName}</td>
@@ -126,20 +149,55 @@ export default function CountingUnit() {
       </div>
 
       {/* Pagination */}
-      <div className="flex flex-wrap justify-center sm:justify-end mt-4 gap-2 text-xs sm:text-sm">
-        <FaAngleLeft className="cursor-pointer" />
-        {[1, 2, 3, 4, 5].map((n) => (
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 text-xs sm:text-sm">
+        {/* รายการ */}
+        <div className="text-gray-600 mb-2 sm:mb-0">
+          แสดง {Math.min((currentPage - 1) * itemsPerPage + 1, units.length)} -{" "}
+          {Math.min(currentPage * itemsPerPage, units.length)} จากทั้งหมด {units.length} รายการ
+        </div>
+
+        {/* ปุ่ม */}
+        <div className="flex items-center gap-1">
           <button
-            key={n}
-            className={`px-2 py-1 rounded ${
-              n === 1 ? "bg-gray-900 text-white" : "hover:bg-gray-100"
-            }`}
+            className={`p-1 rounded ${currentPage === 1
+                ? "text-gray-400 cursor-not-allowed"
+                : "hover:bg-gray-100"
+              }`}
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
           >
-            {n}
+            <FaAngleLeft />
           </button>
-        ))}
-        <FaAngleRight className="cursor-pointer" />
+
+          {[...Array(totalPages)].map((_, i) => {
+            const n = i + 1;
+            return (
+              <button
+                key={n}
+                onClick={() => setCurrentPage(n)}
+                className={`px-2 py-1 rounded ${currentPage === n
+                    ? "bg-gray-900 text-white"
+                    : "hover:bg-gray-100 text-gray-700"
+                  }`}
+              >
+                {n}
+              </button>
+            );
+          })}
+
+          <button
+            className={`p-1 rounded ${currentPage === totalPages
+                ? "text-gray-400 cursor-not-allowed"
+                : "hover:bg-gray-100"
+              }`}
+            onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <FaAngleRight />
+          </button>
+        </div>
       </div>
+
 
       {/* --- Form Modal --- */}
       {showForm && (
