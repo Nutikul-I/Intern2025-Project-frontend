@@ -69,7 +69,7 @@ export default function ProductPage() {
   return (
     <>
       <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
-        <div className="bg-gray-50 shadow-sm rounded-lg overflow-hidden">
+        <div className="bg-white shadow-sm rounded-lg overflow-hidden">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-2 sm:px-4 py-2 sm:py-3">
             <h1 className="text-lg sm:text-xl font-semibold">สินค้า</h1>
