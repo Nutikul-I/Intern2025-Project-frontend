@@ -110,10 +110,8 @@ export default function Home() {
 
   const handleTabClick = (idx) => {
     if (tabs[idx] === "สินค้าทั้งหมด") {
-      // ถ้าเป็น tab สินค้าทั้งหมด ก็ไปหน้า /allproduct
       navigate("/allproduct");
     } else {
-      // มิฉะนั้นเปลี่ยน active tab ตามปกติ
       setActiveTab(idx);
     }
   };
@@ -236,7 +234,8 @@ export default function Home() {
               <p className="font-semibold text-lg mb-3">
                 ฿{Intl.NumberFormat().format(it.price)}
               </p>
-              <button className="w-full py-2 bg-black text-white rounded hover:opacity-90 transition">
+              <button onClick={() => navigate(`/product/${it.id}`, { state: { item: it } })} 
+              className="w-full py-2 bg-black text-white rounded hover:opacity-90 transition">
                 ซื้อเลย
               </button>
             </div>
