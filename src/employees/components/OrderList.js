@@ -2,10 +2,9 @@ import { useState } from "react";
 import {
   FaPencilAlt,
   FaTrash,
-  FaAngleLeft,
-  FaAngleRight,
 } from "react-icons/fa";
 import OrderStatusModal from "./OrderStatusModal";
+import Pagination from "@mui/material/Pagination";
 
 export default function OrderList() {
   /* --------------------- mock orders --------------------- */
@@ -50,10 +49,8 @@ export default function OrderList() {
   const totalItems = ordersWithTotal.length;
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const totalPages = Math.ceil(ordersWithTotal.length / itemsPerPage);
-
-  /* ตัดรายการให้ตรงกับหน้า */
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentOrders = ordersWithTotal.slice(
     startIndex,
@@ -62,22 +59,8 @@ export default function OrderList() {
   const displayStart = totalItems === 0 ? 0 : startIndex + 1;
   const displayEnd = Math.min(startIndex + itemsPerPage, totalItems);
 
-  /* สร้าง page numbers แบบมี … */
-  const getPageNumbers = () => {
-    if (totalPages <= 7)
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-
-    const pages = [1];
-    if (currentPage > 4) pages.push("…");
-
-    const start = Math.max(2, currentPage - 1);
-    const end = Math.min(totalPages - 1, currentPage + 1);
-    for (let i = start; i <= end; i++) pages.push(i);
-
-    if (currentPage < totalPages - 3) pages.push("…");
-    pages.push(totalPages);
-
-    return pages;
+  const handlePageChange = (_, page) => {
+    setCurrentPage(page);
   };
 
   /* ---------------- Modal state ---------------- */
@@ -107,7 +90,7 @@ export default function OrderList() {
       <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
         <div className="bg-white shadow-sm rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-4">
             <h1 className="text-lg sm:text-xl font-semibold">รายการสั่งซื้อ</h1>
           </div>
 
@@ -169,61 +152,19 @@ export default function OrderList() {
           </div>
         </div>
 
-
-        <div className="flex flex-wrap justify-center sm:justify-between items-center mt-4 gap-3 text-xs sm:text-sm">
-        <span className="text-gray-700">
-          แสดง {displayStart}-{displayEnd} จากทั้งหมด {totalItems} รายการ
-        </span>
-
-        {/* ---------- Pagination ---------- */}
-        <div className="flex items-center gap-1">
-          {/* prev */}
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className={`px-2 py-1 rounded flex items-center ${
-              currentPage === 1
-                ? "opacity-30 cursor-not-allowed"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            <FaAngleLeft />
-          </button>
-
-          {getPageNumbers().map((p, idx) =>
-            p === "…" ? (
-              <span key={`dots-${idx}`} className="px-2 select-none">
-                …
-              </span>
-            ) : (
-              <button
-                key={p}
-                onClick={() => setCurrentPage(p)}
-                className={`px-2 py-1 rounded ${
-                  p === currentPage
-                    ? "bg-gray-900 text-white"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                {p}
-              </button>
-            )
-          )}
-
-          {/* next */}
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className={`px-2 py-1 rounded flex items-center ${
-              currentPage === totalPages
-                ? "opacity-30 cursor-not-allowed"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            <FaAngleRight />
-          </button>
+         {/* Summary + MUI Pagination */}
+        <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
+          <span>
+            แสดง {displayStart}-{displayEnd} จากทั้งหมด {totalItems} รายการ
+          </span>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            shape="rounded"
+          />
         </div>
-      </div>
       </div>
 
       {/* ---------- Modal ---------- */}
