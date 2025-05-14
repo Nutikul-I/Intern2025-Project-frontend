@@ -86,7 +86,7 @@ export default function CategoryList() {
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{cat.id}</td>
                   <td className="px-2 sm:px-12 py-1 sm:py-3">{cat.name}</td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3">
-                    <div className="flex items-center justify-center gap-2 text-base">
+                    <div className="flex items-center justify-center text-base">
                       <button
                         className="text-yellow-500 mr-2 hover:opacity-80"
                         onClick={() => {
