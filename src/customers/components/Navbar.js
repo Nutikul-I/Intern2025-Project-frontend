@@ -94,7 +94,7 @@ export default function Navbar() {
         {/* ---- desktop icons + user ---- */}
         <div className="hidden md:flex items-center space-x-4">
           {/* Cart icon */}
-          <NavLink to="/cart" className="text-gray-600 hover:text-gray-900">
+          <NavLink to="/shoppingcart" className="text-gray-600 hover:text-gray-900">
             <FiShoppingCart size={24} />
           </NavLink>
 
