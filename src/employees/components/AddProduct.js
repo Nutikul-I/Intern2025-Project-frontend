@@ -143,11 +143,15 @@ export default function AddProduct() {
                   <td className="px-4 py-2 hidden sm:table-cell">
                     {item.code}
                   </td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3">{item.documentNumber}</td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3">{item.createdAt}</td>
+                  <td className="px-2 sm:px-4 py-1 sm:py-3">
+                    {item.documentNumber}
+                  </td>
+                  <td className="px-2 sm:px-4 py-1 sm:py-3">
+                    {item.createdAt}
+                  </td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{item.product}</td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{item.quantity}</td>
-                  <td className="px-2 sm:px-4 py-1 hidden sm:table-cell">
+                  <td className="px-2 sm:px-4 py-1 sm:py-3 hidden sm:table-cell">
                     {item.importer}
                   </td>
                   <td className="px-4 py-2 text-center hidden sm:table-cell">
