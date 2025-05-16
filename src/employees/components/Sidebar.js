@@ -15,10 +15,8 @@ const Sidebar = ({ currentPath }) => {
     const sectionTitleClass = "px-4 py-2 font-bold text-gray-800 mt-4";
 
     return (
-        <div className="flex">
-            <ProSidebar
-                className="h-screen bg-gray-100 p-2 w-[250px] relative"
-            >
+        <div className="flex ">
+            <ProSidebar className="h-screen p-2 w-[250px] relative bg-gray-100">
                 <div className="text-center mb-5 bg-gray-100">
                     {/* <img src={logo} alt="Logo" className="w-[60px] h-[60px] mx-auto" /> */}
                     <p className="text-2xl font-bold text-gray-800">PAYZ</p>
