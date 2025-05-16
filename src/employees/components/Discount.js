@@ -87,13 +87,23 @@ export default function Discount() {
           </div>
 
           <table className="min-w-full text-xs sm:text-sm">
-            <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">รหัส</th>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">โค้ดส่วนลด</th>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">ส่วนลด(บาท)</th>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">จำนวนคงเหลือ</th>
-                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">จัดการ</th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">
+                  รหัส
+                </th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                  โค้ดส่วนลด
+                </th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                  ส่วนลด (บาท)
+                </th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                  จำนวนคงเหลือ
+                </th>
+                <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">
+                  จัดการ
+                </th>
               </tr>
             </thead>
             <tbody>

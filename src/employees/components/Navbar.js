@@ -12,46 +12,49 @@ const Navbar = ({ toggleSidebar }) => {
     }
 
     return (
-        <>
+        <div className="flex items-center justify-between w-full">
             {/* Sidebar toggle (mobile) */}
-            <button
-                className="lg:hidden text-gray-600 hover:text-gray-900 mr-4"
-                onClick={toggleSidebar}
-            >
-                <FaBars size={20} />
-            </button>
-
-            {/* Title */}
-
-            {location.pathname === "/employee/dashboard" ?
-                <h1 className="text-lg font-semibold text-gray-800">แดชบอร์ด</h1>
-                : <h1 className="text-lg font-semibold text-gray-800"></h1>
-            }
-
-            {/* User Dropdown */}
-            <div className="relative flex items-center gap-4 text-gray-600">
-                <FaUser className="text-xl" />
-
+            <div className="flex items-center gap-4">
                 <button
-
-                    className="flex items-center gap-2 font-semibold text-gray-700 hover:text-gray-900 focus:outline-none"
+                    className="lg:hidden text-gray-600 hover:text-gray-900"
+                    onClick={toggleSidebar}
                 >
-                    นายทดสอบ
+                    <FaBars size={22} />
                 </button>
+
+                {/* Title */}
+                {location.pathname === "/employee/dashboard" && (
+                    <h1 className="text-lg font-semibold text-gray-800">
+                        แดชบอร์ด
+                    </h1>
+                )}
+            </div>
+
+            {/* User section */}
+            <div className="relative flex items-center gap-4">
+                {/* User */}
+                <div className="flex items-center gap-2 cursor-pointer group">
+                    <span className="font-semibold text-gray-700 group-hover:text-gray-900">
+                        นายทดสอบ
+                    </span>
+                    <FaUser className="text-gray-600 group-hover:text-gray-900" />
+                </div>
+                
+                {/* Notification & Settings */}
+                <FaBell className="text-xl text-gray-600 hover:text-gray-900 cursor-pointer transition" />
 
                 <FaCog
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="text-xl cursor-pointer hover:text-gray-900" />
-                    
-                <FaBell className="text-xl cursor-pointer hover:text-gray-900" />
+                    className="text-xl text-gray-600 hover:text-gray-900 cursor-pointer transition"
+                />
 
                 {/* Dropdown */}
                 {dropdownOpen && (
-                    <ul className="absolute right-0 top-10 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <ul className="absolute right-0 top-full mt-2 w-52 bg-white border border-gray-200 rounded-md shadow-xl z-50 animate-fade-in">
                         <li>
                             <button
                                 onClick={handleLogout}
-                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 flex items-center gap-2"
+                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 flex items-center gap-2 transition"
                             >
                                 <FaSignOutAlt />
                                 ออกจากระบบ
@@ -60,7 +63,7 @@ const Navbar = ({ toggleSidebar }) => {
                     </ul>
                 )}
             </div>
-        </>
+        </div>
     )
 }
 
