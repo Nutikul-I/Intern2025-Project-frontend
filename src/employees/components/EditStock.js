@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import Pagination from "@mui/material/Pagination";
+import Swal from "sweetalert2";
 
-import Swal from "sweetalert2"
 export default function EditStock() {
   const [products, setStock] = useState([
     {
@@ -17,10 +17,8 @@ export default function EditStock() {
   ]);
 
   const [showModal, setShowModal] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // NEW: track edit/add mode
+  const [isEditing, setIsEditing] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-
   const [form, setForm] = useState({
     product: "",
     adjustmentType: "",
@@ -53,7 +51,6 @@ export default function EditStock() {
     const timestamp = new Date().toLocaleString("th-TH");
 
     if (isEditing && editingProduct) {
-      // แก้ไขสินค้า
       const updatedProduct = {
         ...editingProduct,
         product: form.product,
@@ -69,7 +66,6 @@ export default function EditStock() {
         )
       );
     } else {
-      // เพิ่มสินค้าใหม่
       const newProduct = {
         id: products.length + 1,
         code: (products.length + 1).toString().padStart(7, "0"),
@@ -81,80 +77,48 @@ export default function EditStock() {
       };
 
       setStock([...products, newProduct]);
+    }
 
     setShowModal(false);
     setForm({ product: "", adjustmentType: "", quantity: "", note: "" });
     setEditingProduct(null);
     setIsEditing(false);
+
+    Swal.fire({
+      icon: "success",
+      title: "บันทึกข้อมูลสำเร็จ",
+      confirmButtonText: "ตกลง",
+      confirmButtonColor: "#1a202c",
+    });
   };
 
-  /* ---------- Pagination ---------- */
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalItems = products.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-
-  const handlePageChange = (_, page) => {
-    setCurrentPage(page);
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
-        if (isEditing && editingProduct) {
-            const updatedProduct = {
-                ...editingProduct,
-                product: form.product,
-                quantity: parseInt(form.quantity),
-                adjustmentType: form.adjustmentType,
-                stockAdjuster: "ผู้ใช้ระบบ",
-                stockAdjustmentAt: timestamp,
-            };
 
-            setStock(
-                products.map((item) =>
-                    item.id === editingProduct.id ? updatedProduct : item
-                )
-            );
-        } else {
-            const newProduct = {
-                id: products.length + 1,
-                code: (products.length + 1).toString().padStart(7, "0"),
-                product: form.product,
-                quantity: parseInt(form.quantity),
-                adjustmentType: form.adjustmentType,
-                stockAdjuster: "ผู้ใช้ระบบ",
-                stockAdjustmentAt: timestamp,
-            };
-
-            setStock([...products, newProduct]);
-        }
-
-       
-
-        // ✅ SweetAlert2 success popup
-        Swal.fire({
-            icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
-            confirmButtonText: "ตกลง",
-            confirmButtonColor: "#1a202c",
-        });
-    };
-
-    return (
-        <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
-            <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3">
-                    <h1 className="text-lg sm:text-xl font-semibold">ปรับสต็อก</h1>
-                    <button
-                        onClick={() => {
-                            setForm({ product: "", adjustmentType: "", quantity: "", note: "" });
-                            setEditingProduct(null);
-                            setIsEditing(false);
-                            setShowModal(true);
-                        }}
-                        className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm"
-                    >
-                        <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
-                    </button>
-                </div>
+  return (
+    <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-0">
+      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3">
+          <h1 className="text-lg sm:text-xl font-semibold">ปรับสต็อก</h1>
+          <button
+            onClick={() => {
+              setForm({ product: "", adjustmentType: "", quantity: "", note: "" });
+              setEditingProduct(null);
+              setIsEditing(false);
+              setShowModal(true);
+            }}
+            className="mt-2 sm:mt-0 flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm"
+          >
+            <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
+          </button>
+        </div>
 
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
@@ -173,45 +137,47 @@ export default function EditStock() {
               </tr>
             </thead>
             <tbody>
-              {products.map((item) => (
-                <tr key={item.id} className="border-t">
-                  <td className="px-2 sm:px-4 py-1 sm:py-3">{item.code}</td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3 hidden sm:table-cell">
-                    {item.stockAdjustmentAt}
-                  </td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3">{item.product}</td>
-                  <td
-                    className={`px-2 sm:px-4 py-1 sm:py-3 font-semibold ${
-                      item.adjustmentType === "เพิ่มสินค้า"
-                        ? "text-green-600"
+              {products
+                .slice(startIndex, startIndex + itemsPerPage)
+                .map((item) => (
+                  <tr key={item.id} className="border-t">
+                    <td className="px-2 sm:px-4 py-1 sm:py-3">{item.code}</td>
+                    <td className="px-2 sm:px-4 py-1 sm:py-3 hidden sm:table-cell">
+                      {item.stockAdjustmentAt}
+                    </td>
+                    <td className="px-2 sm:px-4 py-1 sm:py-3">{item.product}</td>
+                    <td
+                      className={`px-2 sm:px-4 py-1 sm:py-3 font-semibold ${
+                        item.adjustmentType === "เพิ่มสินค้า"
+                          ? "text-green-600"
+                          : item.adjustmentType === "ลดสินค้า"
+                          ? "text-red-600"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {item.adjustmentType === "เพิ่มสินค้า"
+                        ? `+${item.quantity}`
                         : item.adjustmentType === "ลดสินค้า"
-                        ? "text-red-600"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    {item.adjustmentType === "เพิ่มสินค้า"
-                      ? `+${item.quantity}`
-                      : item.adjustmentType === "ลดสินค้า"
-                      ? `-${item.quantity}`
-                      : item.quantity}
-                  </td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3 hidden sm:table-cell">
-                    {item.stockAdjuster}
-                  </td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3 text-center">
-                    <div className="flex justify-center gap-2 text-base">
-                      <FaPencilAlt
-                        className="text-yellow-500 cursor-pointer"
-                        onClick={() => handleEdit(item)}
-                      />
-                      <FaTrash
-                        className="text-red-500 cursor-pointer"
-                        onClick={() => handleDelete(item.id)}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        ? `-${item.quantity}`
+                        : item.quantity}
+                    </td>
+                    <td className="px-2 sm:px-4 py-1 sm:py-3 hidden sm:table-cell">
+                      {item.stockAdjuster}
+                    </td>
+                    <td className="px-2 sm:px-4 py-1 sm:py-3 text-center">
+                      <div className="flex justify-center gap-2 text-base">
+                        <FaPencilAlt
+                          className="text-yellow-500 cursor-pointer"
+                          onClick={() => handleEdit(item)}
+                        />
+                        <FaTrash
+                          className="text-red-500 cursor-pointer"
+                          onClick={() => handleDelete(item.id)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -315,8 +281,6 @@ export default function EditStock() {
           </div>
         </div>
       )}
-
-
     </div>
   );
 }
