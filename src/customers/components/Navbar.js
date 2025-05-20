@@ -5,7 +5,7 @@ import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
 export default function Navbar() {
   /* ───────── navigation links ───────── */
   const navLinks = [
-    { name: "หน้าหลัก", to: "/home" },
+    { name: "หน้าหลัก", to: "/" },
     { name: "เกี่ยวกับเรา", to: "/about" },
     { name: "ติดต่อเรา", to: "/contact" },
     { name: "บล็อก", to: "/blog" },
@@ -60,7 +60,7 @@ export default function Navbar() {
           >
             {openMobile ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
-          <NavLink to="/home" className="text-2xl font-bold">
+          <NavLink to="/" className="text-2xl font-bold">
             PAYZ
           </NavLink>
         </div>
@@ -179,7 +179,7 @@ export default function Navbar() {
               {/* links */}
               <ul className="space-y-2 mb-4">
                 {[
-                  { name: "หน้าหลัก", to: "/home" },
+                  { name: "หน้าหลัก", to: "/" },
                   { name: "เกี่ยวกับเรา", to: "/about" },
                   { name: "ติดต่อเรา", to: "/contact" },
                   { name: "บล็อก", to: "/blog" },

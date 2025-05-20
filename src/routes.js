@@ -8,7 +8,6 @@ import ProcessThree from "./customers/components/ProcessThree";
 import ProductDetail from "./customers/components/ProductDetail";
 import HomePage from "./customers/components/HomePage";
 import Layout from "./customers/pages/Layout";
-import Loading from "./page/loading";
 import Login from "./page/login";
 import Register from "./page/register";
 import AllProduct from "./customers/components/AllProduct";
@@ -38,9 +37,7 @@ const AppRoutes = () => (
     <Route path="/register" element={<Register />} />
 
     <Route element={<Layout />}>
-      <Route index element={<Loading />} />
-      <Route path="/" element={<Loading />} />
-      <Route path="home" element={<HomePage />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="orderhistory" element={<OrderHistory />} />
       <Route path="orderhistory/:id" element={<OrderHistoryDetail />} />
       <Route path="processOne" element={<ProcessOne />} />
@@ -55,7 +52,6 @@ const AppRoutes = () => (
     </Route>
     
     <Route element={<LayoutEmployee />}>
-      <Route path="/employee" element={<Loading />} />
       <Route path="/employee/dashboard" element={<DashBoard />} />
       <Route path="/employee/customer" element={<CustomerInfo />} />
       <Route path="/employee/employee" element={<Employees />} />
