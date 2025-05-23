@@ -1,75 +1,146 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import Pagination from "@mui/material/Pagination";
 import Swal from "sweetalert2";
 import { Dialog, Transition } from "@headlessui/react";
-
-// เปลี่ยนจาก mockCategories เป็น mockDiscounts
-const mockDiscounts = Array.from({ length: 85 }, (_, i) => ({
-  id: i.toString().padStart(7, "0"),
-  code: `DISCOUNT${(i + 1).toString().padStart(3, "0")}`,
-  amount: 50 + (i % 5) * 10, // ส่วนลดระหว่าง 50–90 บาท
-  quantity: 100 - (i % 20), // จำนวนคงเหลือ
-}));
 
 const itemsPerPage = 10;
 
 export default function Discount() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newDiscountCode, setNewDiscountCode] = useState("");
-  const [newDiscountAmount, setNewDiscountAmount] = useState("");
-  const [newDiscountQty, setNewDiscountQty] = useState("");
+  const [formData, setFormData] = useState({ id: 0, code: "", amount: 0, totalQuantity: 0, remainingQuantity: 0 });
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingDiscount, setEditingDiscount] = useState(null);
+  const [discounts, setDiscounts] = useState([]);
 
-  const totalPages = Math.ceil(mockDiscounts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = mockDiscounts.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  useEffect(() => {
+    fetchDiscounts();
+  }, []);
+
+  const fetchDiscounts = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/discount/discount", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // "Authorization": `Bearer ${token}`,
+        },
+      })
+      if (response.ok) {
+        const result = await response.json();
+
+        setDiscounts(result.data);
+      } else {
+        console.error("Fetch failed", response.status);
+      }
+    } catch (err) {
+      console.error("Failed to fetch discounts", err);
+    }
+  };
+
+
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
 
-  const handleSave = () => {
-    if (isEditMode) {
-      console.log("Updating discount:", editingDiscount.id, {
-        code: newDiscountCode,
-        amount: newDiscountAmount,
-        quantity: newDiscountQty,
+  const handleSave = async () => {
+    const payload = formData;
+
+    try {
+      if (isEditMode && editingDiscount) {
+        await fetch(`http://localhost:8080/api/discount/update-discount`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            // "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            id: editingDiscount.id,
+            ...payload,
+          }),
+        });
+      } else {
+        await fetch(`http://localhost:8080/api/discount/create-discount`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: isEditMode ? "อัปเดตข้อมูลสำเร็จ" : "บันทึกข้อมูลสำเร็จ",
+        confirmButtonText: "ตกลง",
+        customClass: {
+          confirmButton: "bg-black text-white px-6 py-2 rounded-full",
+        },
+        buttonsStyling: false,
       });
-    } else {
-      console.log("Creating new discount:", {
-        code: newDiscountCode,
-        amount: newDiscountAmount,
-        quantity: newDiscountQty,
-      });
+
+      fetchDiscounts();
+      handleCloseModal();
+    } catch (error) {
+      Swal.fire("เกิดข้อผิดพลาด", "", "error");
+      console.error(error);
     }
+  };
 
-    handleCloseModal();
-
-    Swal.fire({
-      icon: "success",
-      title: isEditMode ? "อัปเดตข้อมูลสำเร็จ" : "บันทึกข้อมูลสำเร็จ",
-      confirmButtonText: "ตกลง",
-      customClass: {
-        confirmButton: "bg-black text-white px-6 py-2 rounded-full",
-      },
-      buttonsStyling: false,
+  const handleDelete = async (id) => {
+    const confirm = await Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "ข้อมูลจะถูกลบถาวร",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "ลบ",
+      cancelButtonText: "ยกเลิก",
     });
+
+    if (confirm.isConfirmed) {
+      try {
+        await fetch(`http://localhost:8080/api/discount/delete-discount?id=${id}`, {
+          method: "DELETE",
+          headers: {
+            // "Authorization": `Bearer ${token}`,
+          }
+        });
+        fetchDiscounts();
+        Swal.fire("ลบแล้ว", "", "success");
+      } catch (error) {
+        Swal.fire("เกิดข้อผิดพลาด", "", "error");
+        console.error(error);
+      }
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setIsEditMode(false);
     setEditingDiscount(null);
-    setNewDiscountCode("");
-    setNewDiscountAmount("");
-    setNewDiscountQty("");
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === "amount" || name === "totalQuantity" || name === "remainingQuantity"
+        ? Number(value)
+        : value,
+    });
+  };
+
+  const totalPages = Math.ceil(discounts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = discounts.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <>
@@ -79,7 +150,11 @@ export default function Discount() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between px-2 sm:px-4 py-2 sm:py-3">
             <h2 className="text-lg sm:text-xl font-semibold">ส่วนลด</h2>
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setIsModalOpen(true);
+                setIsEditMode(false);
+                setFormData({ id: 0, code: "", amount: 0, totalQuantity: 0, remainingQuantity: 0 });
+              }}
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-900 text-white px-3 sm:px-4 py-2 rounded-xl"
             >
               <span className="text-sm sm:text-base">เพิ่มข้อมูล</span>
@@ -87,7 +162,7 @@ export default function Discount() {
           </div>
 
           <table className="min-w-full text-xs sm:text-sm">
-          <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+            <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>
                 <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">
                   รหัส
@@ -112,22 +187,29 @@ export default function Discount() {
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.id}</td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.code}</td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.amount}</td>
-                  <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.quantity}</td>
+                  <td className="px-2 sm:px-4 py-1 sm:py-3">{discount.remainingQuantity} / {discount.totalQuantity}</td>
                   <td className="px-2 sm:px-4 py-1 sm:py-3 ">
                     <button
                       className="text-yellow-500 mr-2 hover:opacity-80 text-base"
                       onClick={() => {
                         setIsEditMode(true);
                         setEditingDiscount(discount);
-                        setNewDiscountCode(discount.code);
-                        setNewDiscountAmount(discount.amount);
-                        setNewDiscountQty(discount.quantity);
                         setIsModalOpen(true);
+                        setFormData({
+                          id: discount.id,
+                          code: discount.code,
+                          amount: discount.amount,
+                          totalQuantity: discount.totalQuantity,
+                          remainingQuantity: discount.remainingQuantity
+                        })
                       }}
                     >
                       <FaPencilAlt />
                     </button>
-                    <button className="text-red-500 hover:opacity-80 text-base">
+                    <button
+                      className="text-red-500 hover:opacity-80 text-base"
+                      onClick={() => handleDelete(discount.id)}
+                    >
                       <FaTrash />
                     </button>
                   </td>
@@ -142,8 +224,8 @@ export default function Discount() {
       <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
         <div>
           แสดง {startIndex + 1}-
-          {Math.min(startIndex + itemsPerPage, mockDiscounts.length)} จากทั้งหมด{" "}
-          {mockDiscounts.length} รายการ
+          {Math.min(startIndex + itemsPerPage, discounts.length)} จากทั้งหมด{" "}
+          {discounts.length} รายการ
         </div>
         <Pagination
           count={totalPages}
@@ -198,9 +280,10 @@ export default function Discount() {
                         โค้ดส่วนลด
                       </label>
                       <input
+                        name="code"
                         type="text"
-                        value={newDiscountCode}
-                        onChange={(e) => setNewDiscountCode(e.target.value)}
+                        value={formData.code}
+                        onChange={handleChange}
                         className="flex-1 p-2 border rounded-md"
                         placeholder="เช่น DISCOUNT100"
                       />
@@ -210,9 +293,10 @@ export default function Discount() {
                         ส่วนลด (บาท)
                       </label>
                       <input
+                        name="amount"
                         type="number"
-                        value={newDiscountAmount}
-                        onChange={(e) => setNewDiscountAmount(e.target.value)}
+                        value={formData.amount}
+                        onChange={handleChange}
                         className="flex-1 p-2 border rounded-md"
                         placeholder="เช่น 100"
                       />
@@ -222,9 +306,10 @@ export default function Discount() {
                         จำนวนโค้ด
                       </label>
                       <input
+                        name="totalQuantity"
                         type="number"
-                        value={newDiscountQty}
-                        onChange={(e) => setNewDiscountQty(e.target.value)}
+                        value={formData.totalQuantity}
+                        onChange={handleChange}
                         className="flex-1 p-2 border rounded-md"
                         placeholder="เช่น 50"
                       />
