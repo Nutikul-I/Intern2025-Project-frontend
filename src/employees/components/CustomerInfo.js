@@ -1,97 +1,131 @@
-// src/pages/customerinfo.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Pagination from "@mui/material/Pagination";
+import { FaHome, FaPencilAlt, FaTrash } from "react-icons/fa";
+import CustomerFormModal from "./CustomerFormModal";
+import AddressModal from "./CustomerAddressModal";
+
 import {
-  FaHome,
-  FaPencilAlt,
-  FaTrash,
-  FaAngleLeft,
-  FaAngleRight,
-} from "react-icons/fa";
-
-import CustomerFormModal from "./CustomerFormModal.js";
-import AddressModal from "./CustomerAddressModal.js";
-
-// import service createCustomer / updateCustomer / deleteCustomer
-// import { createCustomer, updateCustomer, deleteCustomer } from "../services/customerService.js";
+  listCustomers,
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
+} from "../../Services/customerService.js";
 
 export default function CustomerInfo() {
-  /* ---------- mock data ---------- */
-  const [customers, setCustomers] = useState(
-    Array.from({ length: 53 }).map((_, i) => ({
-      id: i + 1,
-      code: String(i + 1).padStart(7, "0"), // 0000001, 0000002, ...
-      fullName: `ลูกค้าทดสอบ #${i + 1}`,
-      email: `customer${i + 1}@example.com`,
-      phone: `08${String(i + 1).padStart(8, "0")}`, // 0800000001, 0800000002, ...
-      addresses: [],
-    }))
-  );
+  const pageSize = 10;
 
-  /* ---------- modal states ---------- */
+  const [customers, setCustomers] = useState([]);
+  const [allCustomers, setAllCustomers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  /* ── modal states ── */
   const [showForm, setShowForm] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState(null);
 
   const [showAddress, setShowAddress] = useState(false);
   const [addressCustomer, setAddressCustomer] = useState(null);
 
-  /* ---------- handlers ---------- */
+  /* ─────────────────────────────────────────────── */
+  // โหลดข้อมูลครั้งแรกเท่านั้น
+  const fetchAllData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await listCustomers(1, 100); // ดึงข้อมูลมาเยอะๆ
+      
+      // ตรวจสอบและแปลงข้อมูลให้เป็น array
+      const data = Array.isArray(res.data) ? res.data : 
+                  (res.data?.data ? res.data.data : []);
+      
+      // เรียงข้อมูลตาม ID จากน้อยไปมาก
+      const sortedData = [...data].sort((a, b) => a.ID - b.ID);
+      setAllCustomers(sortedData);
+      
+      // แสดงหน้าแรก
+      setCustomers(sortedData.slice(0, pageSize));
+      
+      console.log('All data loaded:', sortedData);
+    } catch (err) {
+      setError("โหลดข้อมูลไม่สำเร็จ");
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // โหลดข้อมูลครั้งแรกเท่านั้น
+  useEffect(() => {
+    fetchAllData();
+  }, []); // empty dependency array
+
+  // อัพเดทข้อมูลที่แสดงเมื่อเปลี่ยนหน้า
+  useEffect(() => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    setCustomers(allCustomers.slice(start, end));
+    console.log('Page changed:', page);
+    console.log('Showing data:', allCustomers.slice(start, end));
+  }, [page, allCustomers]);
+
+  /* ── handlers ─────────────────────────────────── */
   const openAdd = () => {
     setEditingCustomer(null);
     setShowForm(true);
   };
 
-  const openEdit = (cust) => {
-    setEditingCustomer(cust);
-    setShowForm(true);
-  };
-
-  const handleSaveCustomer = (data) => {
-    if (editingCustomer) {
-      // await updateCustomer(editingCustomer.id, data);
-      setCustomers((prev) =>
-        prev.map((c) => (c.id === editingCustomer.id ? { ...c, ...data } : c))
-      );
-    } else {
-      // const res = await createCustomer(data);
-      setCustomers((prev) => [
-        ...prev,
-        { ...data, id: Date.now(), code: String(Date.now()).slice(-7) },
-      ]);
+  const openEdit = async (cust) => {
+    try {
+      const { data } = await getCustomer(cust.ID);
+      setEditingCustomer(data);
+      setShowForm(true);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const handleDelete = (cust) => {
-    // await deleteCustomer(cust.id);
-    setCustomers((prev) => prev.filter((c) => c.id !== cust.id));
+
+  const handleDelete = async (cust) => {
+    if (!window.confirm("ยืนยันลบลูกค้า?")) return;
+    try {
+      await deleteCustomer(cust.ID);
+      /* ถ้าลบจนหน้า current ว่าง → กลับไปหน้าก่อน */
+      const newPage = customers.length === 1 && page > 1 ? page - 1 : page;
+      setPage(newPage);
+      fetchAllData();
+    } catch (err) {
+      alert("ลบไม่สำเร็จ");
+      console.error(err);
+    }
   };
 
-  const openAddressModal = (cust) => {
-    setAddressCustomer(cust);
-    setShowAddress(true);
+  const openAddr = async (cust) => {
+    try {
+      const { data } = await getCustomer(cust.ID);
+      setAddressCustomer(data);
+      setShowAddress(true);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleSaveAddresses = (addresses) =>
-    setCustomers((prev) =>
-      prev.map((c) => (c.id === addressCustomer.id ? { ...c, addresses } : c))
-    );
+  const handleSaveAddr = async (addresses) => {
+    try {
+      const base = { ...addressCustomer, Addresses: addresses };
+      delete base.ID; // backend รับ body แบบ CustomerCreate (ไม่มี ID)
+      await updateCustomer(addressCustomer.ID, base);
+      setShowAddress(false);
+      fetchAllData();
+    } catch (err) {
+      alert("อัปเดตที่อยู่ไม่สำเร็จ");
+    }
+  };
 
-  /* ---------- Pagination states ---------- */
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
-  const totalItems = customers.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentCustomers = customers.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
-  const displayStart = totalItems === 0 ? 0 : startIndex + 1;
-  const displayEnd = Math.min(startIndex + itemsPerPage, totalItems);
-
-  const handlePageChange = (_, page) => {
-    setCurrentPage(page);
+  // เพิ่มฟังก์ชันสำหรับจัดการเปลี่ยนหน้า
+  const handlePageChange = (_, newPage) => {
+    setPage(newPage);
   };
 
   /* ---------- UI ---------- */
@@ -111,68 +145,79 @@ export default function CustomerInfo() {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-xs sm:text-sm">
-              <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
-                <tr>
-                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">
-                    รหัส
-                  </th>
-                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
-                    ชื่อ - นามสกุล
-                  </th>
-                  {/* ซ่อนคอลัมน์อีเมลบนจอเล็ก */}
-                  <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">
-                    อีเมล
-                  </th>
-                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
-                    เบอร์โทรศัพท์
-                  </th>
-                  <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">
-                    จัดการ
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentCustomers.map((c) => (
-                  <tr key={c.id} className="border-t">
-                    <td className="px-2 sm:px-4 py-1 sm:py-3">{c.code}</td>
-                    <td className="px-2 sm:px-4 py-1 sm:py-3">{c.fullName}</td>
-                    <td className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3">
-                      {c.email}
-                    </td>
-                    <td className="px-2 sm:px-4 py-1 sm:py-3">{c.phone}</td>
-                    <td className="px-2 sm:px-4 py-1 sm:py-3">
-                      <div className="flex items-center justify-center gap-2 text-base">
-                        <FaHome
-                          className="cursor-pointer text-emerald-600"
-                          onClick={() => openAddressModal(c)}
-                        />
-                        <FaPencilAlt
-                          className="cursor-pointer text-yellow-500"
-                          onClick={() => openEdit(c)}
-                        />
-                        <FaTrash
-                          className="cursor-pointer text-red-500"
-                          onClick={() => handleDelete(c)}
-                        />
-                      </div>
-                    </td>
+          {loading ? (
+            <p className="p-4">กำลังโหลด...</p>
+          ) : error ? (
+            <p className="p-4 text-red-500">{error}</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-xs sm:text-sm">
+                <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+                  <tr>
+                    <th className="px-2 sm:px-4 py-1 sm:py-3 text-left w-16">
+                      รหัส
+                    </th>
+                    <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                      ชื่อ - นามสกุล
+                    </th>
+                    {/* ซ่อนคอลัมน์อีเมลบนจอเล็ก */}
+                    <th className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3 text-left">
+                      อีเมล
+                    </th>
+                    <th className="px-2 sm:px-4 py-1 sm:py-3 text-left">
+                      เบอร์โทรศัพท์
+                    </th>
+                    <th className="px-2 sm:px-4 py-1 sm:py-3 text-center w-24">
+                      จัดการ
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {customers.map((c) => (
+                    <tr key={c.ID} className="border-t">
+                      <td className="px-2 sm:px-4 py-1 sm:py-3">
+                        {String(c.ID).padStart(7, "0")}
+                      </td>
+                      <td className="px-2 sm:px-4 py-1 sm:py-3">
+                        {c.FirstName} {c.LastName}
+                      </td>
+                      <td className="hidden md:table-cell px-2 sm:px-4 py-1 sm:py-3">
+                        {c.Email}
+                      </td>
+                      <td className="px-2 sm:px-4 py-1 sm:py-3">{c.Phone}</td>
+                      <td className="px-2 sm:px-4 py-1 sm:py-3">
+                        <div className="flex items-center justify-center gap-2 text-base">
+                          <FaHome
+                            className="cursor-pointer text-emerald-600"
+                            onClick={() => openAddr(c)}
+                          />
+                          <FaPencilAlt
+                            className="cursor-pointer text-yellow-500"
+                            onClick={() => openEdit(c)}
+                          />
+                          <FaTrash
+                            className="cursor-pointer text-red-500"
+                            onClick={() => handleDelete(c)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* ---------- Summary + MUI Pagination ---------- */}
         <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
           <span>
-            แสดง {displayStart}-{displayEnd} จากทั้งหมด {totalItems} รายการ
+            แสดง {allCustomers.length ? ((page - 1) * pageSize) + 1 : 0}-
+            {Math.min(page * pageSize, allCustomers.length)} จากทั้งหมด {allCustomers.length} รายการ
           </span>
           <Pagination
-            count={totalPages}
-            page={currentPage}
+            page={page}
+            count={Math.max(1, Math.ceil(allCustomers.length / pageSize))}
             onChange={handlePageChange}
             color="primary"
             shape="rounded"
@@ -184,15 +229,15 @@ export default function CustomerInfo() {
       <CustomerFormModal
         open={showForm}
         onClose={() => setShowForm(false)}
-        onSave={handleSaveCustomer}
-        editingData={editingCustomer}
+        editingData={editingCustomer} // undefined ตอนเพิ่มใหม่
+        onSaved={() => fetchAllData()} // รีโหลด list หลังบันทึก
       />
 
       <AddressModal
         open={showAddress}
         onClose={() => setShowAddress(false)}
-        customer={addressCustomer ?? {}}
-        onSave={handleSaveAddresses}
+        customer={addressCustomer || { addresses: [] }} // 🟢 safe
+        onSave={handleSaveAddr}
       />
     </>
   );

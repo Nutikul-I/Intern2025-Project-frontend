@@ -1,140 +1,165 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
 
-export default function AddressModal({ open, onClose, customer, onSave }) {
-  const [addresses, setAddresses] = useState(customer.addresses || []);
-  const emptyAddr = {
-    title: "",
-    addressLine: "",
-    province: "",
-    district: "",
-    subDistrict: "",
-    postalCode: "",
-    phone: "",
-  };
+import { fetchAddresses, saveAddresses } from "../../Services/customerService.js";
+
+/* ==================================================================
+   props
+   ─────
+   open      : boolean  – เปิด/ปิด modal
+   onClose   : () => void
+   customer  : { ID: number, ... }   ต้องมี ID!
+   onSaved   : (addresses[]) => void (optional)  – callback หลังบันทึกสำเร็จ
+================================================================== */
+export default function CustomerAddressModal({ open, onClose, customer, onSaved }) {
+  /* ────────────── local state ────────────── */
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading]     = useState(false);
+  const [error,   setError]       = useState(null);
+
   const [editing, setEditing] = useState(null);
-
-  const handleEdit = (addr, idx) => {
-    setEditing({ ...addr, idx });
+  const empty = {
+    title: "", addressLine: "", province: "",
+    district: "", subDistrict: "", postalCode: "", phone: "",
   };
 
-  const handleSaveAddr = () => {
-    const isValid = Object.values(editing).every((v) => v?.toString().trim());
-    if (!isValid) {
-      Swal.fire("กรุณากรอกข้อมูลให้ครบทุกช่อง", "", "warning");
-      return;
-    }
+  /* ── โหลดที่อยู่เมื่อ modal เปิด ── */
+  useEffect(() => {
+    if (!open || !customer?.ID) return;
+
+    setLoading(true);
+    setError(null);
+    fetchAddresses(customer.ID)
+      .then((addresses) => {
+        console.log('Addresses loaded:', addresses);
+        setAddresses(addresses);
+      })
+      .catch((e) => {
+        console.error(e);
+        setError("โหลดที่อยู่ไม่สำเร็จ");
+      })
+      .finally(() => setLoading(false));
+  }, [open, customer]);
+
+  /* ────────────── helpers ────────────── */
+  const startEdit = (addr, idx) => setEditing({ ...addr, idx });
+  const cancelEdit = () => setEditing(null);
+
+  const setField = (name, value) =>
+    setEditing((prev) => ({ ...prev, [name]: value }));
+
+  const confirmEdit = () => {
+    const { idx, ...addr } = editing ?? {};
+    const ok = Object.values(addr).every((v) => v.toString().trim());
+    if (!ok) return Swal.fire("กรุณากรอกข้อมูลให้ครบ", "", "warning");
 
     const next = [...addresses];
-    if (editing.idx !== undefined) next[editing.idx] = editing;
-    else next.push(editing);
-
+    idx !== undefined ? (next[idx] = addr) : next.push(addr);
     setAddresses(next);
     setEditing(null);
-    Swal.fire("บันทึกสำเร็จ", "", "success");
   };
 
-  const handleDelete = (idx) =>
+  const removeAddr = (idx) =>
     setAddresses(addresses.filter((_, i) => i !== idx));
 
-  const handleFinish = () => {
-    onSave(addresses);
-    Swal.fire({
-      icon: "success",
-      title: "บันทึกข้อมูลสำเร็จ",
-      confirmButtonText: "ตกลง",
-    }).then(onClose);
+  const handleSaveAll = async () => {
+    try {
+      await saveAddresses(customer.ID, addresses);
+      Swal.fire("บันทึกสำเร็จ", "", "success");
+      onSaved?.(addresses);
+      onClose();
+    } catch (e) {
+      console.error('Error saving addresses:', e.response?.data || e);
+      Swal.fire({
+        icon: "error",
+        title: "บันทึกไม่สำเร็จ",
+        text: e.response?.data?.message || "กรุณาลองใหม่อีกครั้ง",
+        confirmButtonText: "ตกลง"
+      });
+    }
   };
 
+  /* ────────────── UI ────────────── */
   if (!open) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white w-full max-w-md max-h-[80vh] overflow-y-auto rounded-lg p-4">
-        {/* Header */}
+        {/* header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">ที่อยู่</h2>
+          <h2 className="text-lg font-semibold">ที่อยู่ของลูกค้า</h2>
           <button onClick={onClose}>✕</button>
         </div>
 
-        {/* ===== รายการที่อยู่ ===== */}
-        {!editing && (
+        {/* loading / error */}
+        {loading && <p className="text-center py-6">กำลังโหลด...</p>}
+        {error &&   <p className="text-center text-red-600 py-6">{error}</p>}
+
+        {/* list */}
+        {!loading && !error && !editing && (
           <>
             <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
-              {addresses.map((addr, idx) => (
-                <div
-                  key={idx}
-                  className="bg-gray-100 rounded p-4 text-sm relative pr-10"
-                >
-                  <strong>{addr.title}</strong>
-                  <p>{addr.addressLine}</p>
+              {addresses.map((a, i) => (
+                <div key={i} className="bg-gray-100 rounded p-4 text-sm relative pr-10">
+                  <strong>{a.title}</strong>
+                  <p>{a.addressLine}</p>
                   <p>
-                    {addr.subDistrict} {addr.district} {addr.province}{" "}
-                    {addr.postalCode}
+                    {a.subDistrict} {a.district} {a.province} {a.postalCode}
                   </p>
-                  <p>{addr.phone}</p>
+                  <p>{a.phone}</p>
                   <div className="absolute top-2 right-2 flex gap-2">
-                    <FaPencilAlt
-                      className="cursor-pointer"
-                      onClick={() => handleEdit(addr, idx)}
-                    />
-                    <FaTimes
-                      className="cursor-pointer"
-                      onClick={() => handleDelete(idx)}
-                    />
+                    <FaPencilAlt className="cursor-pointer"
+                      onClick={() => startEdit(a, i)} />
+                    <FaTimes className="cursor-pointer"
+                      onClick={() => removeAddr(i)} />
                   </div>
                 </div>
               ))}
+              {addresses.length === 0 && (
+                <p className="text-center text-gray-500">-- ยังไม่มีที่อยู่ --</p>
+              )}
             </div>
 
-            {/* ปุ่มเพิ่ม */}
-            <div className="border-t pt-3">
-              <button
-                onClick={() => setEditing({ ...emptyAddr })}
-                className="mb-3 border px-3 py-1 rounded"
-              >
-                + เพิ่มที่อยู่
-              </button>
-            </div>
+            <button
+              onClick={() => setEditing({ ...empty })}
+              className="border px-3 py-1 rounded"
+            >
+              + เพิ่มที่อยู่
+            </button>
           </>
         )}
 
-        {/* ===== ฟอร์ม เพิ่ม/แก้ไข ===== */}
+        {/* form */}
         {editing && (
           <div className="space-y-3 border-t pt-3">
             {[
-              { label: "ชื่อที่อยู่", name: "title" },
-              { label: "ที่อยู่", name: "addressLine" },
-              { label: "จังหวัด", name: "province" },
-              { label: "อำเภอ", name: "district" },
-              { label: "ตำบล", name: "subDistrict" },
-              { label: "รหัสไปรษณีย์", name: "postalCode" },
-              { label: "เบอร์ติดต่อ", name: "phone" },
-            ].map(({ label, name }) => (
+              ["title", "ชื่อที่อยู่"],
+              ["addressLine", "ที่อยู่"],
+              ["province", "จังหวัด"],
+              ["district", "อำเภอ"],
+              ["subDistrict", "ตำบล"],
+              ["postalCode", "รหัสไปรษณีย์"],
+              ["phone", "เบอร์ติดต่อ"],
+            ].map(([name, label]) => (
               <div key={name}>
                 <label className="text-xs">{label}</label>
                 <input
                   className="mt-1 w-full border px-2 py-1 rounded"
                   value={editing[name] ?? ""}
-                  onChange={(e) =>
-                    setEditing({ ...editing, [name]: e.target.value })
-                  }
-                  required
-                  placeholder="placeholder"
+                  onChange={(e) => setField(name, e.target.value)}
+                  placeholder={label}
                 />
               </div>
             ))}
 
             <div className="flex justify-end gap-2">
-              <button
-                className="border px-3 py-1 rounded"
-                onClick={() => setEditing(null)}
-              >
+              <button onClick={cancelEdit} className="border px-3 py-1 rounded">
                 ยกเลิก
               </button>
               <button
+                onClick={confirmEdit}
                 className="bg-gray-900 text-white px-3 py-1 rounded"
-                onClick={handleSaveAddr}
               >
                 บันทึก
               </button>
@@ -142,17 +167,14 @@ export default function AddressModal({ open, onClose, customer, onSave }) {
           </div>
         )}
 
-        {/* Footer */}
-        {!editing && (
+        {/* footer */}
+        {!editing && !loading && !error && (
           <div className="flex justify-end gap-2 mt-4">
-            <button
-              onClick={onClose}
-              className="border px-4 py-2 rounded hover:bg-gray-100"
-            >
+            <button onClick={onClose} className="border px-4 py-2 rounded">
               ปิด
             </button>
             <button
-              onClick={handleFinish}
+              onClick={handleSaveAll}
               className="bg-gray-900 text-white px-4 py-2 rounded"
             >
               บันทึก
